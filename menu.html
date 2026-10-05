@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Lihat 22 pilihan kebab, burger, lumpia, dan roti bakar Kebab Sumatera. Cari menu favoritmu, lihat isiannya, dan pesan lewat WhatsApp.">
+<title>Semua Menu — Kebab Sumatera</title>
+<link rel="icon" href="image/icon/favicon.png">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/menu.css">
+</head>
+<body class="menu-page">
+<a class="menu-skip" href="#menu-lengkap">Langsung ke menu</a>
+<header class="catalog-header">
+ <nav class="wrap catalog-navigation" aria-label="Navigasi utama">
+  <a class="catalog-brand" href="index.html" aria-label="Kebab Sumatera — beranda"><img src="image/icon/logo.webp" alt="Kebab Sumatera" width="70" height="70"><span>KEBAB<br>SUMATERA</span></a>
+  <div class="catalog-nav-links"><a href="index.html">← Beranda</a><a href="menu.html" aria-current="page">Menu</a><a href="index.html#build-your-own">Racik sendiri ↗</a></div>
+ </nav>
+</header>
+<main>
+<section class="section section-alt" id="menu-lengkap">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Katalog lengkap</span>
+      <h1>PILIH SESUKAMU.<br><em>GAS PESAN!</em></h1>
+      <p>Dari kebab isi penuh sampai roti bakar manis, semua ada harganya di sini.</p>
+    </div>
+    <div class="menu-tools"><label class="menu-search"><span>Cari menu favoritmu</span><input id="menuSearch" type="search" placeholder="Coba ayam, sapi, atau keju…" autocomplete="off"></label><label class="menu-sort"><span>Urutkan</span><select id="menuSort"><option value="default">Urutan menu</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></label></div>
+    <div class="menu-tabs" id="menuTabs" role="group" aria-label="Kategori menu"></div>
+    <div class="menu-results-line"><p id="menuResultCount" role="status" aria-live="polite"></p><span>Klik menu untuk lihat isiannya ↗</span></div>
+    <div id="menuPanels"></div>
+    <p class="menu-note" id="menuNote"></p>
+  </div>
+
+</section>
+<noscript><p class="wrap">Aktifkan JavaScript untuk melihat katalog dan memesan menu. Kamu juga bisa <a href="https://wa.me/6282360422229">menghubungi kami via WhatsApp</a>.</p></noscript>
+</main>
+<footer class="catalog-footer"><div class="wrap"><p>Kebab Sumatera · Teman laparmu.</p><a href="index.html#lokasi">Lokasi &amp; jam buka ↗</a></div></footer>
+<span class="cursor-ring" id="cursorRing" aria-hidden="true"></span>
+<script src="assets/js/catalog-data.js"></script>
+<script src="assets/js/menu.js"></script>
+<script src="assets/js/cursor.js"></script>
+</body>
+</html>

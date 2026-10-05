@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+// Disable browser restoration before it can restore a previous scroll position.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+const restartAtHero = performance.getEntriesByType('navigation')[0]?.type === 'reload' || !location.hash;
+if (restartAtHero) {
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  window.scrollTo({top:0, left:0, behavior:'instant'});
+}
+</script>
+<title>Kebab Sumatera — Kebab, Burger, Lumpia &amp; Roti Bakar Bandung</title>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="icon" href="image/icon/favicon.png">
+<link href="assets/vendor/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/menu.css">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.css">
+
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true"><defs><symbol id="icon-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></symbol><symbol id="icon-tiktok" viewBox="0 0 24 24"><path d="M14 3h3c.3 2.6 1.7 4.1 4 4.5v3a9 9 0 0 1-4-1.3V16a6 6 0 1 1-6-6v3a3 3 0 1 0 3 3Z" fill="currentColor" stroke="none"/></symbol><symbol id="icon-gofood" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M7 7v4m3-4v4M7 9h3m-1.5 2v6m7-10v10m0-10c-3 1-3 5 0 5"/></symbol><symbol id="icon-grabfood" viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8Zm3 0V6a4 4 0 0 1 8 0v2"/><path d="M9 12H8a3 3 0 0 0 0 6h2v-3H8m5-3h4m-4 0v6m0-3h3"/></symbol><symbol id="icon-whatsapp" viewBox="0 0 24 24"><path d="M21 11.5a9 9 0 0 1-13.3 7.9L3 21l1.5-4.6A9 9 0 1 1 21 11.5Z"/><path d="m8 7 2 3-1 1c1 2 2 3 4 3l1-1 3 2c-2 4-9-1-10-5 0-1 0-2 1-3Z"/></symbol><symbol id="icon-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol><symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol><symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></symbol><symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol><symbol id="icon-flame" viewBox="0 0 24 24"><path d="M13 2c1 6 7 7 7 13a8 8 0 0 1-16 0c0-4 3-7 5-9 0 5 2 6 3 7 2-3 2-6 1-11Z"/></symbol><symbol id="icon-food" viewBox="0 0 24 24"><path d="M3 17h18M5 17v-2a7 7 0 0 1 14 0v2M10 5h4m-2 0v3M7 21h10"/></symbol><symbol id="icon-leaf" viewBox="0 0 24 24"><path d="M20 3C7 2 2 8 5 15s14 5 15-12Z M4 21 16 8"/></symbol><symbol id="icon-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="15" rx="3"/><path d="M3 8V5a2 2 0 0 1 2-2h12v3m4 6h-6v5h6"/><circle cx="17" cy="14.5" r=".6"/></symbol></defs></svg>
+
+<nav class="ks-nav" id="navbar" aria-label="Navigasi utama">
+  <div class="nav-inner">
+    <a href="#hero" class="brand"><img data-logo class="brand-logo" alt="Kebab Sumatera"></a>
+    <ul class="nav-links">
+      <li><a href="#hero">Beranda</a></li>
+      <li><a href="#promo">Promo</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="#build-your-own">Racik</a></li>
+      <li><a href="#tentang">Tentang</a></li>
+      <li><a href="#galeri">Galeri</a></li>
+      <li><a href="#review">Ulasan</a></li>
+      <li><a href="#lokasi">Lokasi</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="https://wa.me/6282360422229?text=Halo%20Kebab%20Sumatera%2C%20saya%20mau%20pesan." target="_blank" rel="noopener" class="kbtn kbtn-primary">Pesan Sekarang</a>
+      <button class="nav-burger" id="navBurger" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-label="Buka menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="offcanvas offcanvas-end ks-offcanvas" tabindex="-1" id="mobileMenu" aria-label="Menu">
+  <div class="offcanvas-header"><a href="#hero" class="brand" data-bs-dismiss="offcanvas"><img data-logo class="brand-logo" alt="Kebab Sumatera"></a><button type="button" class="mobile-menu-close" data-bs-dismiss="offcanvas" aria-label="Tutup menu">✕</button></div>
+  <div class="offcanvas-body d-flex flex-column">
+    <a href="#hero" data-bs-dismiss="offcanvas">Beranda</a><a href="menu.html">Menu</a><a href="#promo" data-bs-dismiss="offcanvas">Promo</a><a href="#build-your-own" data-bs-dismiss="offcanvas">Racik Sendiri</a><a href="#tentang" data-bs-dismiss="offcanvas">Tentang</a><a href="#galeri" data-bs-dismiss="offcanvas">Galeri</a><a href="#lokasi" data-bs-dismiss="offcanvas">Kontak</a>
+    <a href="https://wa.me/6282360422229?text=Halo%20Kebab%20Sumatera%2C%20saya%20mau%20pesan." target="_blank" rel="noopener" class="extracted-inline-style-1">Pesan via WhatsApp →</a>
+  </div>
+</div>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-crumbs"><span class="lc"></span><span class="lc"></span><span class="lc"></span><span class="lc"></span><span class="lc"></span><span class="lc"></span></div>
+  <div class="loader-fx" id="loaderFx"></div>
+  <div class="loader-inner">
+    <div class="loader-logo-wrap"><img id="loaderLogo" class="loader-logo" alt=""><div class="loader-shadow"></div></div>
+    <div class="loader-title" id="loaderTitle">
+      <span class="lt-line lt-line1" id="ltLine1"></span>
+      <span class="lt-line lt-line2" id="ltLine2"></span>
+    </div>
+  </div>
+  <p class="loader-text">SIAP NGEBAB!</p>
+  <div class="loader-bar"><i id="loaderBar"></i></div>
+</div>
+
+
+<!-- ============================= HERO ============================= -->
+<section class="hero" id="hero">
+  <h1 class="visually-hidden">Kebab Sumatera — Kebab, Burger, Lumpia &amp; Roti Bakar Bandung</h1>
+  <div class="hero-giant-wrap" id="heroGiant" aria-hidden="true"></div>
+  <div class="hero-stage" id="heroStage"></div>
+  <button class="hero-arrow prev" id="heroPrev" aria-label="Sebelumnya">‹</button>
+  <button class="hero-arrow next" id="heroNext" aria-label="Berikutnya">›</button>
+  <div class="hero-info">
+    <div class="hero-texts" id="heroTexts"></div>
+    <div class="hero-side">
+      <div class="hero-price"><span class="from">Mulai dari</span><span class="amount" id="heroPrice"></span></div>
+      <div class="hero-meta"><div class="hero-counter"><span id="heroCurrent">01</span>/04</div><div class="hero-dots" id="heroDots"></div></div>
+    </div>
+  </div>
+</section>
+
+
+<div class="flavor-ribbon" aria-label="Kebab, burger, lumpia dan roti bakar Bandung"><div class="flavor-track"><span>KEBAB ✦ BURGER ✦ LUMPIA ✦ ROTI BAKAR ✦</span><span aria-hidden="true">KEBAB ✦ BURGER ✦ LUMPIA ✦ ROTI BAKAR ✦</span></div></div>
+
+<!-- PROMO: poster supplied by the outlet -->
+<section class="section promo-section wave-section" id="promo" aria-labelledby="promoTitle">
+ <div class="wrap promo-switch" role="group" aria-label="Pilih promo"><button type="button" data-promo="kebab" aria-pressed="true">01 / Kebab</button><button type="button" data-promo="burger" aria-pressed="false">02 / Burger</button></div>
+ <div class="wrap promo-layout">
+  <div class="promo-copy">
+   <span class="promo-kicker">PROMO KEBAB SUMATERA <span>01 / B1D2</span></span>
+   <h2 id="promoTitle">BAYAR <span class="promo-number">1.</span><br>DAPAT <em>2!</em></h2>
+   <p class="promo-subtitle">Dua kebab. Satu alasan buat kumpul.</p>
+   <p>Kebab Spesial + Kebab Telur Daging. Buat dimakan berdua, atau disimpan sendiri. Kamu yang pilih.</p>
+   <div class="promo-pricing"><div><small>PAKET BERDUA</small><strong><span>Rp</span>22.400</strong></div><div class="promo-discount"><del>Rp29.000</del><b>HEMAT 23%</b></div></div>
+   <a href="https://wa.me/6282360422229?text=Halo%20Kebab%20Sumatera%2C%20promo%20Bayar%201%20Dapat%202%20Rp22.400%20masih%20tersedia%3F" class="kbtn promo-order" target="_blank" rel="noopener">Tanya promo ini <span aria-hidden="true">↗</span></a>
+   <p class="promo-fine">Cek ketersediaan dan harga promo saat memesan.</p>
+  </div>
+  <div class="promo-art" data-tilt><div class="tilt-surface"><div class="promo-poster"><img src="image/promo-bayar-1-dapat-2.jpg" alt="Promo Bayar 1 Dapat 2: Kebab Spesial dan Kebab Telur Daging" width="1071" height="806" loading="lazy"></div><span class="promo-stamp" aria-hidden="true">SATU PAKET<br><b>DUA KEBAB</b></span><span class="promo-scribble" aria-hidden="true">ajak temanmu! ↗</span></div></div>
+ </div>
+<svg class="section-wave" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#f5ce48" d="M0 48C180 100 290 4 470 35S760 112 970 58 1210 10 1440 48V100H0Z"/></svg>
+</section>
+
+<!-- ============================= MENU FAVORIT ============================= -->
+<section class="section" id="menu-favorit">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Bingung pilih? Mulai dari sini.</span>
+      <h2>SEKALI COBA.<br><em>MAU LAGI.</em></h2>
+      <p>Tiga kebab, tiga burger. Enam pilihan buat nemenin laparmu hari ini.</p>
+    </div>
+    <div class="row g-3 g-lg-4" id="favoritGrid"></div>
+    <div class="section-cta-row">
+      <a href="menu.html" class="kbtn kbtn-ghost">Lihat Semua Menu</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= BUILD YOUR OWN ============================= -->
+<section class="section wave-section" id="build-your-own">
+ <div class="wrap">
+  <div class="section-head racik-heading"><span class="eyebrow">Dapur kecil. Selera besar.</span><h2>RACIKANMU.<br><em>ATURANMU.</em></h2><p>Pilih dasarnya, tambah isiannya, lalu kasih sentuhan terakhir. Lihat racikanmu berubah setiap kali kamu memilih.</p></div>
+  <div class="byo racik-layout">
+   <aside class="byo-preview racik-preview">
+    <div class="racik-preview-top"><span>RACIKAN / <b id="racikProductLabel">KEBAB</b></span><span class="racik-count" id="racikCount">1 porsi</span></div>
+    <div class="racik-stage-shell" data-tilt><div class="byo-preview-stage tilt-surface"><div class="racik-orbit" aria-hidden="true"></div><div class="racik-stage-type" aria-hidden="true">BUAT<br>SELERA<br>SENDIRI.</div><img id="byoPreviewImg" src="image/kebab/kebabsumateraayam.webp" alt="Kebab Ayam"><div class="racik-ingredients" id="racikIngredients" aria-hidden="true"></div><span class="racik-ready-tag" aria-hidden="true">made your way</span></div></div>
+    <p class="racik-feedback" id="racikFeedback" role="status" aria-live="polite">Mulai dari kebab ayam. Mau tambah apa?</p>
+    <p class="racik-image-note">Visual racikan sebagai ilustrasi.</p>
+    <div class="racik-receipt"><div class="receipt-head"><span>PESANAN VERSI KAMU</span><span aria-hidden="true">✦</span></div><ul class="byo-summary" id="byoSummary"></ul><div class="byo-total-row"><div><span class="label">Total pesanan</span><small id="racikUnitPrice"></small></div><span class="total" id="byoTotal" aria-live="polite">Rp0</span></div><a href="#" target="_blank" rel="noopener" class="kbtn kbtn-primary kbtn-block" id="byoOrderBtn">Pesan racikan via WhatsApp ↗</a></div>
+   </aside>
+   <form class="byo-form racik-form" id="byoForm">
+    <div class="racik-form-top"><span>BUAT RACIKANMU</span><button type="button" id="racikReset">Ulangi ↺</button></div>
+    <fieldset><legend><span class="step">01</span><span>Mulai dari apa?<small>Pilih satu produk favoritmu.</small></span></legend><div class="opt-grid product-options" id="optProduk"></div></fieldset>
+    <fieldset><legend><span class="step">02</span><span>Tim ayam atau sapi?<small>Atau pilih mix untuk keduanya.</small></span></legend><div class="opt-grid" id="optProtein"></div></fieldset>
+    <fieldset><legend><span class="step">03</span><span>Tambah yang bikin enak.<small id="toppingRule">Pilih 1 topping. Keju boleh ditambah 1 topping lain · +Rp2.000 per topping.</small></span></legend><div class="opt-grid" id="optTopping"></div><p class="topping-progress" id="toppingProgress" role="status"></p></fieldset>
+    <fieldset id="spiceField"><legend><span class="step">04</span><span>Seberapa berani kamu?<small>Pilih topping dulu, lalu geser level pedasmu.</small></span></legend><div id="spiceLevels" class="heat-control"><div class="heat-stage" aria-hidden="true"><span class="heat-glow"></span><div class="heat-image-scale"><img id="heatChili" src="image/komponen/cabai.webp" alt=""></div><div class="heat-type-scale"><strong id="heatNumber">1×</strong></div></div><label for="spiceRange" id="heatLabel">1× · Ringan</label><input id="spiceRange" type="range" min="1" max="5" step="1" value="1" aria-describedby="heatHint" disabled><div class="heat-ticks" aria-hidden="true"><span>1×</span><span>2×</span><span>3×</span><span>4×</span><span>5×</span></div><p id="heatHint">Lengkapi topping untuk membuka level pedas.</p></div></fieldset>
+    <fieldset class="racik-qty-field"><legend><span class="step">06</span><span>Mau berapa porsi?<small>Racikan yang sama untuk setiap porsi.</small></span></legend><div class="qty-row"><button type="button" class="qty-btn" id="qtyMinus" aria-label="Kurangi jumlah">−</button><output class="qty-value" id="qtyValue" aria-live="polite">1</output><button type="button" class="qty-btn" id="qtyPlus" aria-label="Tambah jumlah">+</button><span class="qty-note">buat sendiri<br>atau rame-rame.</span></div></fieldset>
+   </form>
+  </div>
+ </div>
+<svg class="section-wave" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#d92538" d="M0 48C180 100 290 4 470 35S760 112 970 58 1210 10 1440 48V100H0Z"/></svg>
+</section>
+
+<div class="racik-mobile-bar" id="racikMobileBar"><img src="image/kebab/kebabsumateraayam.webp" alt="" id="racikMobileImg"><div><small>Racikan kamu</small><strong id="racikMobileTotal">Rp15.000</strong></div><a href="#build-your-own">Lihat racikan ↑</a></div>
+
+<!-- ============================= TENTANG ============================= -->
+<section class="section section-alt" id="tentang">
+  <div class="wrap">
+    <div class="tentang-grid">
+      <div class="tentang-art">
+        <img src="image/model/kebabspesialmix.webp" alt="Kebab Sumatera">
+      </div>
+      <div class="tentang-copy">
+        <span class="eyebrow">Dari Percut, untuk perut.</span>
+        <h2 class="extracted-inline-style-5">TEMAN LAPAR.<br><em>TEMAN MALAM.</em></h2>
+        <p>Ada malam yang butuh kebab. Ada juga yang butuh burger, lumpia, atau roti bakar buat teman ngobrol. Di Kebab Sumatera, kamu tinggal pilih sesuai selera.</p>
+        <p>Temui kami di Jl. Ps. 7, Hutan, Percut Sei Tuan, setiap hari pukul 18.00–23.00 WIB. Mau makan di rumah? Pesan lewat GoFood, GrabFood, atau hubungi kami di WhatsApp.</p>
+        <div class="tentang-stats">
+          <div><strong>4</strong><span>Kategori menu</span></div>
+          <div><strong>25+</strong><span>Varian pilihan</span></div>
+          <div><strong>18–23</strong><span>Buka setiap hari · WIB</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<svg class="section-wave" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#f5ce48" d="M0 48C180 100 290 4 470 35S760 112 970 58 1210 10 1440 48V100H0Z"/></svg>
+</section>
+
+<!-- ============================= GALERI ============================= -->
+<section class="section" id="galeri">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Album Kebab Sumatera / 01—11</span>
+      <h2>GEROBAK KAMI.<br><em>MENU FAVORITMU.</em></h2>
+      <p>Dari gerobak di Hutan Percut sampai pesananmu. Geser untuk menjelajah, klik untuk melihat lebih dekat.</p>
+    </div>
+    <div class="gallery-toolbar"><div class="gallery-filters" role="group" aria-label="Filter galeri"><button type="button" data-gallery-filter="Semua" aria-pressed="true">Semua</button><button type="button" data-gallery-filter="Outlet" aria-pressed="false">Gerobak</button><button type="button" data-gallery-filter="Kebab" aria-pressed="false">Kebab</button><button type="button" data-gallery-filter="Burger" aria-pressed="false">Burger</button><button type="button" data-gallery-filter="Lainnya" aria-pressed="false">Lainnya</button></div><span id="galleryCount" role="status">12 foto</span></div>
+    <div class="gallery-grid" id="masonryGrid" tabindex="0" role="region" aria-label="Album foto, gunakan panah kiri dan kanan untuk menggeser"></div>
+    <div class="gallery-navigation"><span>GESER UNTUK MENJELAJAH <span aria-hidden="true">↔</span></span><div class="gallery-progress" aria-hidden="true"><span id="galleryProgress"></span></div><div><button type="button" id="galleryPrev" aria-label="Geser galeri ke kiri">←</button><button type="button" id="galleryNext" aria-label="Geser galeri ke kanan">→</button></div></div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="lightboxCaption">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Tutup">✕</button>
+  <button type="button" id="lightboxPrev" class="gallery-prev" aria-label="Foto sebelumnya">←</button>
+  <figure><img id="lightboxImg" alt=""><figcaption><strong id="lightboxCaption"></strong><span id="lightboxPosition" aria-live="polite"></span></figcaption></figure>
+  <button type="button" id="lightboxNext" class="gallery-next" aria-label="Foto berikutnya">→</button>
+</div>
+
+<!-- ============================= KENAPA PILIH KAMI ============================= -->
+<section class="section section-alt" id="kenapa">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Alasan pelanggan balik lagi</span>
+      <h2>ISINYA NIAT.<br><em>RASANYA DEKAT.</em></h2>
+    </div>
+    <div class="row g-3" id="whyGrid"></div>
+  </div>
+</section>
+
+<!-- ============================= CARA PESAN ============================= -->
+<section class="section" id="cara-pesan">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Gampang, kok</span>
+      <h2>TIGA, DUA, SATU.<br><em>SIAP MAKAN!</em></h2>
+    </div>
+    <div class="steps-row" id="stepsRow"></div>
+  </div>
+</section>
+
+<!-- ============================= REVIEW ============================= -->
+<section class="section section-alt" id="review">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Kata mereka</span>
+      <h2>Review Pelanggan</h2>
+    </div>
+    <div class="review-stats">
+      <div><strong>5/5 ★</strong><span>Pada 4 ulasan pilihan ini</span></div>
+      <div><strong>4 ulasan</strong><span>Cerita pelanggan asli</span></div>
+      <div><strong>TikTok & GoFood</strong><span>Sumber ulasan pelanggan</span></div>
+    </div>
+    <div class="review-nav">
+      <button class="hero-arrow" id="revPrev" aria-label="Review sebelumnya">‹</button>
+      <button class="hero-arrow" id="revNext" aria-label="Review berikutnya">›</button>
+    </div>
+    <div class="review-track-wrap">
+      <div class="review-track" id="reviewTrack"></div>
+    </div>
+    <p class="menu-note">Cuplikan ulasan pelanggan dari TikTok dan GoFood. Teks mengikuti ulasan pada tangkapan layar.</p>
+  </div>
+</section>
+
+<!-- ============================= LOKASI ============================= -->
+<section class="section" id="lokasi">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Datang atau hubungi kami</span>
+      <h2>MALAM INI,<br><em>MAMPIR SINI.</em></h2>
+    </div>
+    <div class="lokasi-grid">
+      <div class="lokasi-info">
+        <div class="info-row"><span class="ico"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-pin"/></svg></span><div><b>Alamat</b><span><strong>Kebab Sumatera — Hutan Percut Sei Tuan</strong><br>Jl. Ps. 7, Hutan, Percut Sei Tuan, Deli Serdang, Sumatera Utara 20371, Indonesia</span></div></div>
+        <div class="info-row"><span class="ico"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-clock"/></svg></span><div><b>Jam Buka</b><span>Setiap hari, 18.00–23.00 WIB</span></div></div>
+        <div class="info-row"><span class="ico"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"/></svg></span><div><b>WhatsApp</b><span><a href="https://wa.me/6282360422229" target="_blank" rel="noopener">+62 823-6042-2229</a></span></div></div>
+        <div class="info-row"><span class="ico"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-instagram"/></svg></span><div><b>Instagram</b><span><a href="https://www.instagram.com/kebabsumatera/" target="_blank" rel="noopener">@kebabsumatera</a></span></div></div>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Kebab+Sumatera+Hutan+Percut+Sei+Tuan+Jl+Ps+7+Deli+Serdang" target="_blank" rel="noopener" class="kbtn kbtn-primary extracted-inline-style-6"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-pin"/></svg> Buka di Google Maps</a>
+      </div>
+      <div class="map-art outlet-card"><span class="outlet-label">MAMPIR MALAM INI!</span><span class="pin" aria-hidden="true"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-pin"/></svg></span><h3>Hutan Percut<br>Sei Tuan</h3><p>Jl. Ps. 7 · Deli Serdang</p><span class="outlet-status" data-outlet-status>Setiap hari · 18.00–23.00 WIB</span><a href="https://vt.tiktok.com/ZS9DRrxDj2Ypf-5OYB3/?poisharing=Kebab-Sumatera---Hutan-Percut-Sei-Tuan" target="_blank" rel="noopener" class="kbtn kbtn-primary"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-tiktok"/></svg> Lihat outlet di TikTok</a></div>
+    </div>
+  </div>
+<svg class="section-wave" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#df2638" d="M0 48C180 100 290 4 470 35S760 112 970 58 1210 10 1440 48V100H0Z"/></svg>
+</section>
+
+<!-- ============================= CTA ============================= -->
+<section class="cta-section" id="cta-final">
+  <div class="cta-orbit orbit-one" aria-hidden="true">✦</div><div class="cta-orbit orbit-two" aria-hidden="true">✳</div>
+  <div class="wrap">
+    <span class="eyebrow">Malam makin enak, tinggal pilih!</span>
+    <h2>LAPAR? GAS<br>KEBAB SUMATERA!</h2>
+    <p class="cta-desc">Mampir ke Kebab Sumatera atau pesan menu favoritmu lewat aplikasi.</p>
+    <div class="platform-grid"><a class="order-platform platform-tiktok" href="https://vt.tiktok.com/ZS9DRrxDj2Ypf-5OYB3/?poisharing=Kebab-Sumatera---Hutan-Percut-Sei-Tuan" target="_blank" rel="noopener"><span class="platform-icon" aria-hidden="true"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-tiktok"/></svg></span><span><small>Kenali outlet kami</small><strong>TikTok</strong></span><span class="platform-arrow" aria-hidden="true"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-arrow"/></svg></span></a><a class="order-platform platform-gofood" href="https://gofood.link/a/A8ivZ2o" target="_blank" rel="noopener"><span class="platform-icon brand-image brand-image-gofood" aria-hidden="true"><img src="image/icon/gofood-reference.png" alt="" width="64" height="64" loading="lazy"></span><span><small>Pesan favoritmu di</small><strong>GoFood</strong></span><span class="platform-arrow" aria-hidden="true"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-arrow"/></svg></span></a><a class="order-platform platform-grab" href="https://grab.onelink.me/2695613898?pid=inappsharing&amp;c=6-C2LFSEBBE8BAKE&amp;is_retargeting=true&amp;af_dp=grab%3A%2F%2Fopen%3FscreenType%3DGRABFOOD%26sourceID%3DA4pcqCZkS4%26merchantIDs%3D6-C2LFSEBBE8BAKE&amp;af_force_deeplink=true&amp;af_web_dp=https%3A%2F%2Fwww.grab.com%2Fdownload&amp;fbclid=PAT01DUAUp8TVleHRuA2FlbQIxMABwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp32rE1QIBEeHxRanRv6h8OZ5eNw0NHRCpSrU3G67n2ZTS1k4A4OUyRD9swK4_aem_ZuMu-Vjppk_s9raHYko26g" target="_blank" rel="noopener"><span class="platform-icon brand-image brand-image-grab" aria-hidden="true"><img src="image/icon/grabfood-reference.png" alt="" width="64" height="64" loading="lazy"></span><span><small>Pesan favoritmu di</small><strong>GrabFood</strong></span><span class="platform-arrow" aria-hidden="true"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-arrow"/></svg></span></a></div>
+    <div class="cta-details"><span>Setiap hari · 18.00–23.00 WIB</span><a href="https://wa.me/6282360422229" target="_blank" rel="noopener"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"/></svg> Tanya lewat WhatsApp</a></div>
+  </div>
+</section>
+<footer>
+ <div class="wrap">
+  <div class="footer-topline"><span>ENAKNYA BIKIN BALIK LAGI.</span><a href="#hero" aria-label="Kembali ke atas">↑</a></div>
+  <div class="footer-grid">
+   <div class="footer-brand"><a href="#hero" class="brand"><img data-logo class="brand-logo" alt="Kebab Sumatera"></a><p>Kebab, burger, lumpia, dan roti bakar Bandung. Teman ngemil malam di Percut Sei Tuan.</p><div class="footer-socials"><a href="https://www.instagram.com/kebabsumatera/" target="_blank" rel="noopener"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-instagram"/></svg><span>Instagram</span></a><a href="https://www.tiktok.com/@kebabsumatera" target="_blank" rel="noopener"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-tiktok"/></svg><span>TikTok</span></a></div><p>@kebabsumatera</p></div>
+   <div><h4>Jelajahi</h4><ul><li><a href="#hero">Beranda</a></li><li><a href="menu.html">Menu</a></li><li><a href="#promo">Promo</a></li><li><a href="#build-your-own">Racik Sendiri</a></li><li><a href="#tentang">Tentang</a></li><li><a href="#galeri">Galeri</a></li><li><a href="#cta-final">Pesan Online</a></li></ul></div>
+   <div><h4>Hubungi Kami</h4><ul><li><a href="https://wa.me/6282360422229" target="_blank" rel="noopener">WhatsApp ↗<br>+62 823-6042-2229</a></li><li><a href="tel:+6282360422229">Telepon: +62 823-6042-2229</a></li><li><a href="mailto:kebabsumatera@gmail.com">kebabsumatera@gmail.com</a></li></ul></div>
+   <div><h4>Outlet &amp; Jam Buka</h4><address><b>Kebab Sumatera — Hutan Percut Sei Tuan</b><br>Jl. Ps. 7, Hutan, Percut Sei Tuan, Deli Serdang, Sumatera Utara 20371, Indonesia</address><p class="footer-hours">Setiap hari<br><strong>18.00–23.00 WIB</strong></p><span class="outlet-status" data-outlet-status>Setiap hari · 18.00–23.00 WIB</span><a class="footer-directions" href="https://www.google.com/maps/search/?api=1&amp;query=Kebab+Sumatera+Hutan+Percut+Sei+Tuan+Jl+Ps+7+Deli+Serdang" target="_blank" rel="noopener">Petunjuk arah ↗</a></div>
+  </div>
+  <div class="footer-bottom">© 2026 Kebab Sumatera. Semua hak dilindungi.</div>
+ </div>
+</footer>
+
+<a href="https://wa.me/6282360422229?text=Halo%20Kebab%20Sumatera%2C%20saya%20mau%20pesan." target="_blank" rel="noopener" class="wa-float" aria-label="Chat WhatsApp"><svg class="ks-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"/></svg></a>
+
+<span class="cursor-ring" id="cursorRing" aria-hidden="true"></span>
+
+<script src="assets/vendor/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/lenis.min.js"></script>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/js/catalog-data.js"></script>
+<script src="assets/js/script.js"></script>
+<script src="assets/js/heat-fire.js"></script>
+<script src="assets/js/menu.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.js"></script>
+<script src="assets/js/experience.js"></script>
+<script src="assets/js/cursor.js"></script>
+
+
+
+</body>
+</html>
