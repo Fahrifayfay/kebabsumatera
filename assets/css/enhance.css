@@ -1,0 +1,194 @@
+/* =====================================================================
+   enhance.css — dimuat paling akhir di index.html
+   1) Semua judul section & teks "Tentang" rata tengah
+   2) Ulasan: tanpa scroll otomatis, kartu dilebarkan
+   3) Section Bantuan (tanya jawab cara pakai website)
+   ===================================================================== */
+
+/* ---------- 1. Rata tengah ---------- */
+.section-head,
+#menu-favorit .section-head,
+#galeri .section-head,
+#tentang .tentang-copy,
+.tentang-copy{ text-align:center; }
+.section-head,
+#galeri .section-head{ max-width:880px; margin-inline:auto; padding-right:0!important; }
+.section-head h2{ transform-origin:center bottom; font-size:clamp(2.8rem,5.8vw,5.08rem); }
+#galeri .section-head h2{ font-size:clamp(2.8rem,5.4vw,4.86rem); }
+@media(max-width:700px){
+  .section-head h2,#galeri .section-head h2{ font-size:clamp(2.43rem,9.72vw,3.67rem); }
+}
+.section-head p,
+#galeri .section-head p,
+.tentang-copy p{ margin-inline:auto; }
+.section-head .eyebrow,
+.tentang-copy .eyebrow{ margin-inline:auto; }
+.section-head:after{ margin:22px auto 0; }
+#tentang .tentang-copy{ max-width:600px; margin-inline:auto; }
+.tentang-copy h2{ transform-origin:center bottom; }
+.tentang-stats{ justify-content:center; }
+@media (max-width:860px){
+  .tentang-grid{ justify-items:center; }
+}
+
+/* ---------- 2. Ulasan: kartu statis & lebar ---------- */
+.rv-layout{ align-items:stretch!important; }
+.rv-layout .review-track-wrap{ min-width:0; }
+.rv-layout #reviewTrack{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:22px;
+  overflow:visible!important;
+  padding:6px 8px 12px 2px!important;
+  margin:0!important;
+  cursor:default!important;
+  transform:none!important;
+  scroll-snap-type:none!important;
+}
+.rv-layout #reviewTrack .rv-card{
+  flex:none!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:100%;
+}
+@media (max-width:900px){
+  .rv-layout #reviewTrack{ padding:0!important; }
+}
+@media (max-width:640px){
+  .rv-layout #reviewTrack{ grid-template-columns:1fr; gap:16px; }
+}
+
+/* ---------- 3. Bantuan (FAQ) ---------- */
+#bantuan{ position:relative; }
+.help-list{
+  max-width:860px; margin:0 auto; display:flex; flex-direction:column; gap:14px;
+  position:relative; z-index:2; text-align:left;
+}
+.help-item{
+  background:linear-gradient(160deg,#c71f32,#ae1629);
+  border:2px solid rgba(255,255,255,.34);
+  border-radius:22px;
+  box-shadow:0 12px 24px #a20f2526;
+  color:#fff;
+  transition:background .4s ease,color .4s ease,border-color .4s ease,box-shadow .4s ease,transform .4s cubic-bezier(.2,.9,.25,1);
+}
+.help-item:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.7); }
+.help-item.open{
+  background:#fff7dd; color:#24252a; border-color:#24252a;
+  box-shadow:6px 7px 0 #24252a; transform:none;
+}
+.help-item h3{ margin:0; font:inherit; }
+.help-q{
+  all:unset; box-sizing:border-box; width:100%; cursor:pointer;
+  display:flex; align-items:center; gap:16px; padding:18px 20px;
+  font:700 1.08rem/1.35 'Baloo 2','Plus Jakarta Sans',sans-serif; color:inherit; border-radius:20px;
+}
+.help-q:focus-visible{ outline:3px solid #ffe04b; outline-offset:3px; }
+.help-item.open .help-q:focus-visible{ outline-color:#d92538; }
+.help-n{
+  flex:none; display:grid; place-items:center; width:46px; height:46px; border-radius:14px;
+  background:#ffdf47; color:#98152b; font:400 1.25rem/1 'Anton',sans-serif; letter-spacing:.02em;
+  transform:rotate(-5deg); transition:transform .45s cubic-bezier(.34,1.32,.64,1),background .3s,color .3s;
+}
+.help-item:hover .help-n{ transform:rotate(5deg) scale(1.06); }
+.help-item.open .help-n{ background:#d92538; color:#fff; transform:rotate(-4deg) scale(1.05); }
+.help-t{ flex:1; min-width:0; }
+.help-ic{
+  flex:none; position:relative; width:34px; height:34px; border-radius:50%;
+  background:rgba(255,255,255,.2); transition:background .3s,transform .45s cubic-bezier(.34,1.32,.64,1);
+}
+.help-ic::before,.help-ic::after{
+  content:''; position:absolute; left:50%; top:50%; width:14px; height:2.5px; margin:-1.25px 0 0 -7px;
+  background:currentColor; border-radius:2px; transition:transform .4s cubic-bezier(.2,.9,.25,1);
+}
+.help-ic::after{ transform:rotate(90deg); }
+.help-item.open .help-ic{ background:#24252a; color:#fff; transform:rotate(180deg); }
+.help-item.open .help-ic::after{ transform:rotate(0deg); }
+.help-a{
+  display:grid; grid-template-rows:0fr; opacity:0;
+  transition:grid-template-rows .45s cubic-bezier(.2,.9,.25,1),opacity .35s ease;
+}
+.help-a>div{ overflow:hidden; min-height:0; }
+.help-a p{ margin:0; padding:0 22px 22px 82px; font-size:.98rem; line-height:1.75; font-weight:500; }
+.help-a b{ background:#ffe04b; color:#24252a; padding:0 .3em; border-radius:5px; font-weight:700; }
+.help-item.open .help-a{ grid-template-rows:1fr; opacity:1; }
+.help-more{ margin-top:34px; text-align:center; position:relative; z-index:2; }
+.help-more p{ margin:0 0 14px; font-weight:600; color:#fff4e6; }
+.help-wa{
+  display:inline-flex; align-items:center; gap:10px; padding:13px 24px; border-radius:99px;
+  background:#25d366; color:#06361a; font-weight:800; text-decoration:none;
+  border:3px solid #24252a; box-shadow:5px 6px 0 #24252a;
+  transition:transform .3s cubic-bezier(.2,.9,.25,1),box-shadow .3s;
+}
+.help-wa img{ width:26px; height:26px; border-radius:8px; }
+.help-wa:hover{ transform:translate(-3px,-4px); box-shadow:8px 10px 0 #24252a; color:#06361a; }
+@media (max-width:640px){
+  .help-q{ padding:14px 14px; gap:12px; font-size:.98rem; }
+  .help-n{ width:40px; height:40px; font-size:1.05rem; }
+  .help-a p{ padding:0 16px 18px 16px; font-size:.93rem; }
+}
+@media (prefers-reduced-motion:reduce){
+  .help-item,.help-a,.help-ic,.help-ic::before,.help-ic::after,.help-n{ transition:none; }
+}
+
+/* ---------- 4. Popup "Pesan lewat mana?": tanpa scroll ---------- */
+.os{ width:min(760px,calc(100vw - 24px)); max-height:none; overflow:visible; }
+.os-top{ border-radius:25px 25px 0 0; overflow:hidden; }
+.os-list{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+.os-foot{ border-radius:0 0 22px 22px; }
+@media (max-width:600px){
+  .os{ width:min(420px,calc(100vw - 24px)); }
+  .os-list{ grid-template-columns:1fr; gap:8px; padding:12px 12px 4px; }
+  .os-top{ padding:16px 16px 12px; }
+  .os-top .os-sub{ display:none; }
+  .os-badge{ width:44px; height:44px; }
+  .os-badge svg{ width:22px; height:22px; }
+  .os h2{ font-size:2rem; }
+  .os-i{ padding:7px 10px 7px 8px; }
+  .os-ic{ flex-basis:44px; width:44px; height:44px; }
+  .os-foot{ margin:8px 12px 12px; }
+}
+@media (max-width:600px) and (max-height:700px){
+  .os{ max-height:calc(100dvh - 16px); overflow-y:auto; overscroll-behavior:contain; }
+  .os-top{ padding:12px 16px 8px; }
+  .os-kicker{ margin-top:4px; }
+  .os h2{ font-size:1.7rem; margin:2px 0 4px; }
+  .os-list{ gap:6px; padding:10px 12px 2px; }
+  .os-i{ padding:5px 10px 5px 6px; }
+  .os-ic{ flex-basis:40px; width:40px; height:40px; }
+  .os-foot{ margin:6px 12px 10px; padding:8px 12px; }
+}
+
+/* ---------- 5. Animasi ulasan & rating (kartu tetap diam di tempat, tapi hidup) ---------- */
+@media (prefers-reduced-motion:no-preference){
+  /* kartu melayang pelan, bergantian */
+  .rv-layout #reviewTrack .rv-card{ animation:rvFloat 5.5s ease-in-out infinite; }
+  .rv-layout #reviewTrack .rv-card:nth-child(2){ animation-duration:6.4s; animation-delay:-1.6s; }
+  .rv-layout #reviewTrack .rv-card:nth-child(3){ animation-duration:6s; animation-delay:-3.1s; }
+  .rv-layout #reviewTrack .rv-card:nth-child(4){ animation-duration:7s; animation-delay:-.8s; }
+  .rv-layout #reviewTrack .rv-card:hover{ animation-play-state:paused; }
+  @keyframes rvFloat{ 0%,100%{ transform:translateY(0) rotate(0) } 50%{ transform:translateY(-9px) rotate(-.5deg) } }
+
+  /* bintang di kartu berkilau bergantian */
+  .rv-layout .rv-card.is-in .on .rv-star{
+    animation:uStar .55s var(--u-ease,cubic-bezier(.2,1.4,.3,1)) both,
+              rvTwinkle 3.4s ease-in-out infinite;
+    animation-delay:calc(var(--i)*.09s + .15s), calc(var(--i)*.28s + 1.4s);
+  }
+  @keyframes rvTwinkle{ 0%,70%,100%{ transform:scale(1) rotate(0); filter:none } 82%{ transform:scale(1.35) rotate(14deg); filter:drop-shadow(0 0 5px #ffd23f) } }
+
+  /* bintang ringkasan 5.0 berdenyut */
+  .rv-summary.is-in .rv-stars>span{
+    animation:uStar .6s var(--u-ease,cubic-bezier(.2,1.4,.3,1)) both, rvTwinkle 3s ease-in-out infinite;
+    animation-delay:calc(var(--i)*.11s + .25s), calc(var(--i)*.22s + 1.6s);
+  }
+  .rv-score strong{ animation:rvScore 3.6s ease-in-out infinite; }
+  @keyframes rvScore{ 0%,100%{ transform:scale(1) } 50%{ transform:scale(1.07) } }
+
+  /* kotak "Kasih rating kamu": bintang bergelombang ajak diketuk */
+  .rv-rate-stars button:not(.on){ animation:rvInvite 2.4s ease-in-out infinite; animation-delay:calc((var(--n,0))*.14s); }
+  .rv-rate-stars button:nth-child(1){--n:0}.rv-rate-stars button:nth-child(2){--n:1}.rv-rate-stars button:nth-child(3){--n:2}.rv-rate-stars button:nth-child(4){--n:3}.rv-rate-stars button:nth-child(5){--n:4}
+  .rv-rate-stars:hover button{ animation-play-state:paused; }
+  @keyframes rvInvite{ 0%,60%,100%{ translate:0 0; color:rgba(255,255,255,.5) } 30%{ translate:0 -7px; color:#ffe9a0 } }
+}

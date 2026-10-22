@@ -1,0 +1,45 @@
+/* Preserve the artwork and animations; suspend only content outside the viewport.
+   Kept last in the cascade so older infinite-animation rules cannot override it. */
+.motion-offscreen, .motion-offscreen::before, .motion-offscreen::after,
+.motion-offscreen *, .motion-offscreen *::before, .motion-offscreen *::after,
+.motion-background *, .motion-background *::before, .motion-background *::after {
+  animation-play-state: paused !important;
+}
+.os:not(.on) *, .os:not(.on) *::before, .os:not(.on) *::after {
+  animation-play-state: paused !important;
+}
+/* Transparent hidden backdrops need no compositor blur until opened. */
+.os-bd:not(.on), .mm-bd:not(.on) { visibility: hidden; }
+.os-bd.on, .mm-bd.on { visibility: visible; }
+
+/* Same 4–18px equalizer movement without recalculating layout every frame. */
+.gx-eq u { height:18px; transform-origin:bottom; animation-name:gxEqComposite; }
+@keyframes gxEqComposite { 0%,100% { transform:scaleY(.222222); } 50% { transform:scaleY(1); } }
+
+/* Keep every logo piece, with the full assembly visible before the shorter exit. */
+.loader { transition-duration:.8s; }
+.kp1 { animation-duration:1.4s,6s;  animation-delay:.15s,1.7s; }
+.kp2 { animation-duration:1.3s,4.2s; animation-delay:.8s,2.3s; }
+.kp3 { animation-duration:1.4s,3.6s; animation-delay:1.25s,2.7s; }
+.kp4 { animation-duration:1.4s,2.8s; animation-delay:1.7s,3.1s; }
+.kp5 { animation-duration:1.3s,4s;   animation-delay:2.15s,3.5s; }
+.kp6 { animation-duration:1.3s,4s;   animation-delay:2.6s,3.9s; }
+
+@media (max-width:860px) {
+  #navbar.ks-nav .brand-logo {
+    height:72px !important;
+    width:auto;
+    max-width:150px !important;
+    object-fit:contain;
+  }
+  .wa-fab {
+    top:calc(14px + env(safe-area-inset-top, 0px) + var(--mobile-order-height, 50px) + 18px);
+    right:14px;
+    bottom:auto;
+    z-index:9040;
+  }
+}
+@media (max-width:860px) and (max-height:540px) {
+  /* Scroll tiles only: keep the popup's decorative pointer outside its border. */
+  .mm-grid { max-height:calc(100dvh - 205px - env(safe-area-inset-bottom, 0px)); overflow-y:auto; }
+}

@@ -1,0 +1,22 @@
+/* ===== HERO TALL (HP): kata raksasa memanjang ke bawah + memudar ===== */
+@media (max-width: 760px) {
+  html body .hero {
+    --giant-glyph-top: 14svh;   /* posisi puncak huruf dari atas hero */
+    --giant-stretch: 2.5;       /* fallback; JS menyesuaikan per kata supaya tingginya sama */
+  }
+
+  html body .hero .hero-giant-wrap .giant {
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 auto !important;
+    width: max-content !important;
+    max-width: none !important;
+    line-height: 1.05 !important;
+    font-size: var(--fit-size, min(calc(88vw / var(--len) * 2), 40svh)) !important;
+    top: calc(var(--giant-glyph-top) - 0.2em * var(--giant-stretch)) !important;
+    transform-origin: 50% 0 !important;
+    transform: scaleY(var(--giant-stretch)) !important;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 40%, rgba(0,0,0,.35) 70%, transparent 96%) !important;
+            mask-image: linear-gradient(to bottom, #000 0%, #000 40%, rgba(0,0,0,.35) 70%, transparent 96%) !important;
+  }
+}
