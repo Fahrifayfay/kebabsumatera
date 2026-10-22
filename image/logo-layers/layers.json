@@ -1,0 +1,134 @@
+{
+  "canvas": [
+    1290,
+    1220
+  ],
+  "layers": [
+    {
+      "id": "01-badge",
+      "file": "01-badge.png",
+      "width": 1290,
+      "height": 1219,
+      "visibleBounds": [
+        60,
+        86,
+        1230,
+        1147
+      ],
+      "placement": [
+        90,
+        140,
+        1120,
+        970
+      ],
+      "label": "Latar emblem",
+      "transformOrigin": "50% 50%",
+      "zIndex": 0
+    },
+    {
+      "id": "02-menara",
+      "file": "02-menara.png",
+      "width": 1290,
+      "height": 1219,
+      "visibleBounds": [
+        750,
+        10,
+        1242,
+        674
+      ],
+      "placement": [
+        790,
+        15,
+        350,
+        500
+      ],
+      "label": "Menara",
+      "transformOrigin": "50% 95%",
+      "zIndex": 1
+    },
+    {
+      "id": "03-maskot",
+      "file": "03-maskot.png",
+      "width": 1290,
+      "height": 1219,
+      "visibleBounds": [
+        137,
+        77,
+        1199,
+        1143
+      ],
+      "placement": [
+        500,
+        300,
+        590,
+        635
+      ],
+      "label": "Kepala maskot",
+      "transformOrigin": "52% 82%",
+      "zIndex": 2
+    },
+    {
+      "id": "04-tangan-kebab",
+      "file": "04-tangan-kebab.png",
+      "width": 1290,
+      "height": 1219,
+      "visibleBounds": [
+        187,
+        52,
+        967,
+        1162
+      ],
+      "placement": [
+        215,
+        412,
+        375,
+        580
+      ],
+      "label": "Tangan + kebab",
+      "transformOrigin": "46% 91%",
+      "zIndex": 3
+    },
+    {
+      "id": "05-teks-kebab",
+      "file": "05-teks-kebab.png",
+      "width": 1408,
+      "height": 1117,
+      "visibleBounds": [
+        10,
+        216,
+        1404,
+        955
+      ],
+      "placement": [
+        60,
+        85,
+        790,
+        395
+      ],
+      "label": "Tulisan Kebab",
+      "transformOrigin": "50% 50%",
+      "zIndex": 4
+    },
+    {
+      "id": "06-teks-sumatera",
+      "file": "06-teks-sumatera.png",
+      "width": 1290,
+      "height": 1219,
+      "visibleBounds": [
+        26,
+        738,
+        1273,
+        1191
+      ],
+      "placement": [
+        160,
+        790,
+        1115,
+        400
+      ],
+      "label": "Tulisan Sumatera",
+      "transformOrigin": "50% 50%",
+      "zIndex": 5
+    }
+  ]
+}

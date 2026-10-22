@@ -1,0 +1,36 @@
+{
+  "tool": "Built-in image_gen",
+  "source": "C:/Users/ADVAN/Downloads/kebablogo.png",
+  "layers": [
+    {
+      "id": "01-badge",
+      "prompt": "Use case: background-extraction. Input is the flattened Kebab Sumatera logo, EDIT TARGET. Deliver ONE isolated animation layer as a genuine transparent RGBA PNG. Keep original illustration shapes, colors, shading, thick outlines and exact lettering. Maintain original near-square 1290x1220 aspect composition and object size/location in the full canvas; do NOT recenter or enlarge the part. Every other part must become completely transparent. No background, no checkerboard drawn, no labels, no new decorations. Reconstruct only small occluded regions needed to animate the isolated object. Keep ONLY the large round yellow-orange badge behind everything (roughly x90..1210,y245..1060). Restore a complete clean circular/oval golden yellow center with orange rim, black/navy outline and thin gold edge. Remove ALL text banners, tower, face/hair, hand, kebab. Transparent outside badge; fill all holes formerly occupied by these removed objects with matching badge color.",
+      "path": "C:\\Users\\ADVAN\\.codex\\generated_images\\01a0f604-b4fc-7d81-ac26-66142b6f39c9\\exec-3481a792-1423-46a2-bff3-ae5ae9d19fdc.png"
+    },
+    {
+      "id": "02-menara",
+      "prompt": "Use case: background-extraction. Input is the flattened Kebab Sumatera logo, EDIT TARGET. Deliver ONE isolated animation layer as a genuine transparent RGBA PNG. Keep original illustration shapes, colors, shading, thick outlines and exact lettering. Maintain original near-square 1290x1220 aspect composition and object size/location in the full canvas; do NOT recenter or enlarge the part. Every other part must become completely transparent. No background, no checkerboard drawn, no labels, no new decorations. Reconstruct only small occluded regions needed to animate the isolated object. Keep ONLY the orange and yellow striped tower at top right, including dark gray oval platform and orange/black support struts. Tower stays near x790..1140,y15..500. Remove badge, all text, mascot, hand, food. Complete lower struts behind hair, keeping tower silhouette self-contained.",
+      "path": "C:\\Users\\ADVAN\\.codex\\generated_images\\01a0f604-b4fc-7d81-ac26-66142b6f39c9\\exec-0459dc81-3320-4b13-b5f7-e6d008934619.png"
+    },
+    {
+      "id": "03-maskot",
+      "prompt": "Use case: background-extraction. Input is the flattened Kebab Sumatera logo, EDIT TARGET. Deliver ONE isolated animation layer as a genuine transparent RGBA PNG. Keep original illustration shapes, colors, shading, thick outlines and exact lettering. Maintain original near-square 1290x1220 aspect composition and object size/location in the full canvas; do NOT recenter or enlarge the part. Every other part must become completely transparent. No background, no checkerboard drawn, no labels, no new decorations. Reconstruct only small occluded regions needed to animate the isolated object. Keep ONLY the smiling boy's entire head, including black/navy swept hair, skin face, both eyes, nose, open smiling mouth and visible ear, plus original white/black outline. Keep at original x500..1090,y300..935. Remove background badge, tower, lettering banners, hand and food. Preserve exact character expression and head tilt; clean complete head silhouette without food or yellow patches.",
+      "path": "C:\\Users\\ADVAN\\.codex\\generated_images\\01a0f604-b4fc-7d81-ac26-66142b6f39c9\\exec-8e79b130-489d-48bf-9023-49a057a30d54.png"
+    },
+    {
+      "id": "04-tangan-kebab",
+      "prompt": "Use case: background-extraction. Input is the flattened Kebab Sumatera logo, EDIT TARGET. Deliver ONE isolated animation layer as a genuine transparent RGBA PNG. Keep original illustration shapes, colors, shading, thick outlines and exact lettering. Maintain original near-square 1290x1220 aspect composition and object size/location in the full canvas; do NOT recenter or enlarge the part. Every other part must become completely transparent. No background, no checkerboard drawn, no labels, no new decorations. Reconstruct only small occluded regions needed to animate the isolated object. Keep ONLY the foreground hand holding the kebab, as ONE cohesive part: all green lettuce, meats, red vegetables, yellow cheese drip, tan tortilla with brown spots, gray-white wrapper and entire hand with fingers. Remove head/hair, lettering, badge, tower. Preserve original hand pose, kebab slant and visual details. Complete clean edges where banner overlapped the bottom of hand/wrapper. No disembodied floating food fragments.",
+      "path": "C:\\Users\\ADVAN\\.codex\\generated_images\\01a0f604-b4fc-7d81-ac26-66142b6f39c9\\exec-9cc03cab-cb1d-4411-b36d-c5c2ccbe2894.png"
+    },
+    {
+      "id": "05-teks-kebab",
+      "prompt": "Use case: background-extraction. Input is the flattened Kebab Sumatera logo, EDIT TARGET. Deliver ONE isolated animation layer as a genuine transparent RGBA PNG. Keep original illustration shapes, colors, shading, thick outlines and exact lettering. Maintain original near-square 1290x1220 aspect composition and object size/location in the full canvas; do NOT recenter or enlarge the part. Every other part must become completely transparent. No background, no checkerboard drawn, no labels, no new decorations. Reconstruct only small occluded regions needed to animate the isolated object. Keep ONLY the upper black waving banner and the EXACT white script word 'Kebab' on it, with navy highlights, black stroke, thin gold outer edge. Entire banner with original left tip and right curved edge. No badge, tower, head, hands, food, bottom text or added words. Preserve the lettering EXACTLY Kebab, its swooping K and raised terminal b, same slanted arrangement.",
+      "path": "C:\\Users\\ADVAN\\.codex\\generated_images\\01a0f604-b4fc-7d81-ac26-66142b6f39c9\\exec-e2c3c736-4e8c-4c10-af56-762cae711060.png"
+    },
+    {
+      "id": "06-teks-sumatera",
+      "prompt": "Use case: background-extraction. Input is the flattened Kebab Sumatera logo, EDIT TARGET. Deliver ONE isolated animation layer as a genuine transparent RGBA PNG. Keep original illustration shapes, colors, shading, thick outlines and exact lettering. Maintain original near-square 1290x1220 aspect composition and object size/location in the full canvas; do NOT recenter or enlarge the part. Every other part must become completely transparent. No background, no checkerboard drawn, no labels, no new decorations. Reconstruct only small occluded regions needed to animate the isolated object. Keep ONLY the lower black curved banner and EXACT white script word 'Sumatera', including navy edge highlight, thin gold outer border. Preserve the entire original swooping ribbon silhouette and exact S-u-m-a-t-e-r-a lettering with original 3D gray shadows. No badge, tower, head, hand, food, top word. Complete unobtrusive black banner edge formerly under the hand.",
+      "path": "C:\\Users\\ADVAN\\.codex\\generated_images\\01a0f604-b4fc-7d81-ac26-66142b6f39c9\\exec-810a34ea-2d86-4428-883b-0245921bacaa.png"
+    }
+  ]
+}
