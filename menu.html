@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Lihat 22 pilihan kebab, burger, lumpia, dan roti bakar Kebab Sumatera. Cari menu favoritmu, lihat isiannya, dan pesan lewat WhatsApp.">
+<meta name="description" content="Lihat 22 pilihan kebab, burger, lumpia, dan roti bakar Kebab Sumatera. Cari menu favoritmu, lihat isiannya, dan pesan lewat GoFood atau GrabFood.">
 <title>Semua Menu — Kebab Sumatera</title>
 <link rel="icon" href="image/icon/favicon.png">
 <link rel="stylesheet" href="assets/css/fonts.css">
@@ -12,34 +12,58 @@
 </head>
 <body class="menu-page">
 <a class="menu-skip" href="#menu-lengkap">Langsung ke menu</a>
+
+<!-- Latar belakang bergerak -->
+<div class="menu-bg" aria-hidden="true">
+  <i class="mb mb1"></i><i class="mb mb2"></i><i class="mb mb3"></i><i class="mb mb4"></i>
+  <span class="ms" style="--x:6%;--y:14%;--s:22;--d:0s">✦</span>
+  <span class="ms" style="--x:91%;--y:10%;--s:30;--d:1.2s">✦</span>
+  <span class="ms" style="--x:14%;--y:46%;--s:14;--d:2.1s">✦</span>
+  <span class="ms" style="--x:84%;--y:40%;--s:18;--d:.6s">✦</span>
+  <span class="ms" style="--x:4%;--y:78%;--s:26;--d:1.8s">✦</span>
+  <span class="ms" style="--x:95%;--y:72%;--s:16;--d:2.6s">✦</span>
+  <span class="ms" style="--x:50%;--y:92%;--s:20;--d:.3s">✦</span>
+</div>
+
 <header class="catalog-header">
  <nav class="wrap catalog-navigation" aria-label="Navigasi utama">
-  <a class="catalog-brand" href="index.html" aria-label="Kebab Sumatera — beranda"><img src="image/icon/logo.webp" alt="Kebab Sumatera" width="70" height="70"><span>KEBAB<br>SUMATERA</span></a>
-  <div class="catalog-nav-links"><a href="index.html">← Beranda</a><a href="menu.html" aria-current="page">Menu</a><a href="index.html#build-your-own">Racik sendiri ↗</a></div>
+  <a class="catalog-brand" href="index.html?intro=0" aria-label="Kebab Sumatera — beranda"><img src="image/icon/logo.webp" alt="Kebab Sumatera" width="70" height="70"><span>KEBAB<br>SUMATERA</span></a>
+  <div class="catalog-nav-links"><a class="nav-home" href="index.html?intro=0"><span class="nav-home-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.2 12 4l8 7.2"/><path d="M6.2 9.6V19a1 1 0 0 0 1 1H10v-5.2h4V20h2.8a1 1 0 0 0 1-1V9.6"/></svg></span><span>Beranda</span></a><a href="menu.html" aria-current="page">Menu</a><a href="index.html?intro=0#cta-final">Pesan online ↗</a></div>
  </nav>
 </header>
+
+<div class="menu-ribbon" aria-hidden="true"><div class="menu-ribbon-track"><span>KEBAB ✦ BURGER ✦ LUMPIA ✦ ROTI BAKAR ✦ KEBAB ✦ BURGER ✦ LUMPIA ✦ ROTI BAKAR ✦ </span><span>KEBAB ✦ BURGER ✦ LUMPIA ✦ ROTI BAKAR ✦ KEBAB ✦ BURGER ✦ LUMPIA ✦ ROTI BAKAR ✦ </span></div></div>
+
 <main>
-<section class="section section-alt" id="menu-lengkap">
+<section class="section" id="menu-lengkap">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Katalog lengkap</span>
-      <h1>PILIH SESUKAMU.<br><em>GAS PESAN!</em></h1>
+      <h1><span class="h1-line"><span>PILIH SESUKAMU.</span></span><br><span class="h1-line"><em><span>GAS PESAN!</span></em></span></h1>
       <p>Dari kebab isi penuh sampai roti bakar manis, semua ada harganya di sini.</p>
     </div>
-    <div class="menu-tools"><label class="menu-search"><span>Cari menu favoritmu</span><input id="menuSearch" type="search" placeholder="Coba ayam, sapi, atau keju…" autocomplete="off"></label><label class="menu-sort"><span>Urutkan</span><select id="menuSort"><option value="default">Urutan menu</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></label></div>
-    <div class="menu-tabs" id="menuTabs" role="group" aria-label="Kategori menu"></div>
+
+    <div class="menu-controls">
+      <div class="menu-tools"><label class="menu-search"><span>Cari menu favoritmu</span><input id="menuSearch" type="search" placeholder="Coba ayam, sapi, atau keju…" autocomplete="off"></label><label class="menu-sort"><span>Urutkan</span><select id="menuSort"><option value="default">Urutan menu</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></label></div>
+      <div class="menu-tabs" id="menuTabs" role="group" aria-label="Kategori menu"></div>
+    </div>
     <div class="menu-results-line"><p id="menuResultCount" role="status" aria-live="polite"></p><span>Klik menu untuk lihat isiannya ↗</span></div>
     <div id="menuPanels"></div>
     <p class="menu-note" id="menuNote"></p>
   </div>
-
 </section>
-<noscript><p class="wrap">Aktifkan JavaScript untuk melihat katalog dan memesan menu. Kamu juga bisa <a href="https://wa.me/6282360422229">menghubungi kami via WhatsApp</a>.</p></noscript>
+<noscript><p class="wrap">Aktifkan JavaScript untuk melihat katalog menu. Kamu juga bisa memesan lewat <a href="https://gofood.link/a/A8ivZ2o">GoFood</a> atau langsung kunjungi <a href="https://www.instagram.com/kebabsumatera/">Instagram kami</a>.</p></noscript>
 </main>
-<footer class="catalog-footer"><div class="wrap"><p>Kebab Sumatera · Teman laparmu.</p><a href="index.html#lokasi">Lokasi &amp; jam buka ↗</a></div></footer>
+
+<div class="menu-wave" aria-hidden="true"><svg viewBox="0 0 1440 100" preserveAspectRatio="none"><g class="wv-b"><path d="M0 100V52C140 84 330 84 480 54 S800 16 960 50 S1300 80 1440 52C1580 84 1770 84 1920 54 S2240 16 2400 50 S2740 80 2880 52V100Z"/></g><g class="wv-a"><path d="M0 100V52C140 98 330 98 480 55 S800 2 960 50 S1300 94 1440 52C1580 98 1770 98 1920 55 S2240 2 2400 50 S2740 94 2880 52V100Z"/></g></svg></div>
+<footer class="catalog-footer"><div class="wrap"><p>Kebab Sumatera · Teman laparmu.</p><a href="index.html?intro=0#lokasi">Lokasi &amp; jam buka ↗</a></div></footer>
 <span class="cursor-ring" id="cursorRing" aria-hidden="true"></span>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/vendor/lenis.min.js"></script>
 <script src="assets/js/catalog-data.js"></script>
 <script src="assets/js/menu.js"></script>
+<script src="assets/js/menu-motion.js"></script>
 <script src="assets/js/cursor.js"></script>
 </body>
 </html>
