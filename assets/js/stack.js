@@ -10,6 +10,7 @@
   if (!pairs.length) return;
   const secs = pairs.flat();
   const pins = pairs.map(p => p[0]);
+  const dimmers = new WeakMap();
 
   pairs.forEach(([pin, over], i) => {
     pin.classList.add('stack-pin'); over.classList.add('stack-over');
@@ -17,6 +18,7 @@
     over.style.setProperty('--stack-z', String(11 + i * 2));
     const dim = document.createElement('i'); dim.className = 'stack-dim'; dim.setAttribute('aria-hidden', 'true');
     pin.append(dim);
+    dimmers.set(pin, dim);
   });
 
   const layout = () => {
@@ -31,7 +33,7 @@
     pairs.forEach(([pin, over]) => {
       const p = Math.max(0, Math.min(1, 1 - over.getBoundingClientRect().top / vh));
       const v = p.toFixed(3);
-      if (pin._cover !== v) { pin._cover = v; pin.style.setProperty('--cover', v); }
+      if (pin._cover !== v) { pin._cover = v; dimmers.get(pin).style.setProperty('--cover', v); }
     });
   };
   const schedule = () => { if (!raf) raf = requestAnimationFrame(update); };

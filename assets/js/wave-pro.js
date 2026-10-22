@@ -45,6 +45,16 @@ window.goTo=function(index){
 // Read geometry together, then write. Idle drift only touches the wave SVG,
 // not inherited CSS properties on the entire section/document every frame.
 const vis=new Set(),positions=new WeakMap(),waveNodes=new WeakMap();
+const motionTargets=new WeakMap(),bandTargets=new WeakMap();
+const mobileMotion=matchMedia('(max-width:820px), (hover:none)');
+function cacheMotionTargets(){
+  hosts.forEach(h=>{
+    const selector=mobileMotion.matches?'.review-card,.why-card,.order-platform':'.section-head h2,.fav-card img,.gallery-image img,.promo-poster,.tentang-art img,.review-card,.why-card,.order-platform';
+    motionTargets.set(h,[...h.querySelectorAll(selector+',.vb span')]);
+    bandTargets.set(h,[...h.querySelectorAll('.vb span')]);
+  });
+}
+mobileMotion.addEventListener('change',()=>{cacheMotionTargets();geometryDirty=true;wakeWave();});
 let scrollProgress=null;
 let waveFrame=0,geometryDirty=true,last=scrollY,sv=0,lastVelocity='',lastProgress='';
 hosts.forEach(h=>waveNodes.set(h,[...h.querySelectorAll(':scope > .wl-layer > svg')]));
@@ -68,8 +78,10 @@ function tick(t){
   }
   const velocity=reduce?'0':sv.toFixed(3);
   rows.forEach(({h,top})=>{
-    if(measure){positions.set(h,top);h.style.setProperty('--bx',(top*.5).toFixed(1));}
-    if(geometryDirty||velocity!==lastVelocity)h.style.setProperty('--sv',velocity);
+    // Set scroll variables only on their consumers, never on a section whose
+    // hundreds of descendants would all inherit and recalculate them.
+    if(measure){positions.set(h,top);(bandTargets.get(h)||[]).forEach(e=>e.style.setProperty('--bx',(top*.5).toFixed(1)));}
+    if(geometryDirty||velocity!==lastVelocity)(motionTargets.get(h)||[]).forEach(e=>e.style.setProperty('--sv',velocity));
     const x=reduce?0:Math.sin(t/7000+h._s)*16-sv*35;
     (waveNodes.get(h)||[]).forEach(svg=>svg.style.transform=`translate3d(${x.toFixed(2)}px,${(top*.03).toFixed(1)}px,0)`);
   });
@@ -87,6 +99,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnim
 wakeWave();
 const rio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rio.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
 function tag(){
+  cacheMotionTargets();
   const FROM={'.promo-art':{x:100,y:0,rotate:6},'.tentang-art':{x:-100,y:0,rotate:-6},'.gallery-card':{y:90,scale:.9},'.fav-card':{y:80,scale:.92,rotate:-2},'.tentang-stats>div':{y:50,scale:.8},'.why-card':{y:70,scale:.92}};
   const G=['.promo-copy>:not(h2)','.promo-art','.tentang-art','.tentang-copy>:not(h2)','.tentang-stats>div','.gallery-toolbar','.gallery-card','.fav-card','.why-card','.step-item','.section-head>:not(h2)'];
   const useGS=!!(window.gsap&&window.ScrollTrigger)&&!reduce,pending=[],cnt=new WeakMap();
@@ -113,6 +126,7 @@ setInterval(()=>{
 /* VELOCITY BAND per section */
 const W={promo:'PROMO ✦ HEMAT ✦ BAYAR 1 DAPAT 2 ✦ ','menu-favorit':'KEBAB ✦ BURGER ✦ LUMPIA ✦ ROTI BAKAR ✦ '};
 $$('.section,.cta-section').forEach((s,i)=>{const w=W[s.id];if(!w)return;const v=document.createElement('div');v.className='vb';v.setAttribute('aria-hidden','true');v.innerHTML='<span class="vb-a">'+w.repeat(9)+'</span><span class="vb-b">'+w.repeat(9)+'</span>';s.style.setProperty('--dir',i%2?1:-1);s.insertBefore(v,s.children[1])});
+cacheMotionTargets();
 /* SPLIT KATA + MARK */
 function split(n,c){[...n.childNodes].forEach(k=>{if(k.nodeType===3){const f=document.createDocumentFragment();k.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(' '));return}const w=document.createElement('span');w.className='w';const x=document.createElement('span');x.className='wi';x.style.setProperty('--w',c.i++);x.textContent=t;w.appendChild(x);f.appendChild(w)});k.replaceWith(f)}else if(k.nodeType===1&&k.tagName!=='BR')split(k,c)})}
 const sio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const h=e.target;sio.unobserve(h);const ws=$$('.wi',h);if(window.gsap){gsap.fromTo(ws,{y:'118%',rotate:7},{y:'0%',rotate:0,duration:1.1,ease:'power4.out',stagger:.055,onComplete:()=>{h.classList.add('in');gsap.set(ws,{clearProps:'transform'})}})}else h.classList.add('in')}),{threshold:.3});

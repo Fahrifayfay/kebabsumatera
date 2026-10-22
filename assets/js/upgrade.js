@@ -155,6 +155,14 @@
       });
       track.classList.add('is-walled');
       track.after(wall);
+      // The column keeps moving; only effects inside clipped cards sleep.
+      // Observing the cards also accounts for the wall's overflow clipping.
+      if('IntersectionObserver' in window){
+        const cardMotion=new IntersectionObserver(entries=>entries.forEach(entry=>{
+          entry.target.classList.toggle('motion-offscreen',!entry.isIntersecting);
+        }),{rootMargin:'100px'});
+        wall.querySelectorAll('.rv-col-in > *').forEach(card=>cardMotion.observe(card));
+      }
     }
   }
 
