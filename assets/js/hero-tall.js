@@ -7,6 +7,7 @@
   var CAP = 0.74;           // tinggi huruf kapital Anton ≈ 0.74 × font-size
 
   function fit() {
+    fittedWidth = document.documentElement.clientWidth;
     var giants = document.querySelectorAll('.giant');
     for (var i = 0; i < giants.length; i++) {
       var g = giants[i];
@@ -25,8 +26,14 @@
     }
   }
 
-  var t;
-  function later() { clearTimeout(t); t = setTimeout(fit, 120); }
+  var t, fittedWidth = document.documentElement.clientWidth;
+  // Mobile browser chrome resizes the viewport height while scrolling. The
+  // lettering is width-based, so only a width change needs a new measurement.
+  function later() {
+    if (document.documentElement.clientWidth === fittedWidth) return;
+    clearTimeout(t);
+    t = setTimeout(fit, 120);
+  }
 
   fit();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);

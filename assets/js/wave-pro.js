@@ -116,7 +116,15 @@ $$('.section,.cta-section').forEach((s,i)=>{const w=W[s.id];if(!w)return;const v
 /* SPLIT KATA + MARK */
 function split(n,c){[...n.childNodes].forEach(k=>{if(k.nodeType===3){const f=document.createDocumentFragment();k.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(' '));return}const w=document.createElement('span');w.className='w';const x=document.createElement('span');x.className='wi';x.style.setProperty('--w',c.i++);x.textContent=t;w.appendChild(x);f.appendChild(w)});k.replaceWith(f)}else if(k.nodeType===1&&k.tagName!=='BR')split(k,c)})}
 const sio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const h=e.target;sio.unobserve(h);const ws=$$('.wi',h);if(window.gsap){gsap.fromTo(ws,{y:'118%',rotate:7},{y:'0%',rotate:0,duration:1.1,ease:'power4.out',stagger:.055,onComplete:()=>{h.classList.add('in');gsap.set(ws,{clearProps:'transform'})}})}else h.classList.add('in')}),{threshold:.3});
-$$('.section-head h2,.tentang-copy h2,.promo-copy h2,.cta-section h2').forEach(h=>{if(reduce)return;split(h,{i:0});h.classList.add('sw');sio.observe(h)});
+$$('.section-head h2,.tentang-copy h2,.promo-copy h2,.cta-section h2').forEach(h=>{
+  if(reduce)return;
+  // script.js already owns the word reveal. Keep the same final word masks,
+  // but never animate a second transform inside its moving .swi elements.
+  const owned=!!h.querySelector('.swi');
+  split(h,{i:0});h.classList.add('sw');
+  if(owned){h.classList.add('in');return;}
+  sio.observe(h);
+});
 const KW=/(Kebab Spesial|kebab|burger|lumpia|roti bakar|GoFood|GrabFood|TikTok|18\.00–23\.00 WIB|promo)/i;
 $$('.section-head p,.tentang-copy p,.promo-desc,.cta-desc').forEach(p=>{if(p.children.length)return;p.innerHTML=p.textContent.replace(KW,'<mark class="hlm">$1</mark>')});
 
