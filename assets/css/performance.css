@@ -20,12 +20,12 @@
 .loader { transition-duration:.8s; }
 .loader-inner { position:absolute; left:50%; top:44%; translate:-50% -50%; }
 .lb-rays,.lb-ring { left:50%; top:44%; }
-.kp1 { animation-duration:.98s,6s;  animation-delay:.105s,1.19s; }
-.kp2 { animation-duration:.91s,4.2s; animation-delay:.56s,1.61s; }
-.kp3 { animation-duration:.98s,3.6s; animation-delay:.875s,1.89s; }
-.kp4 { animation-duration:.98s,2.8s; animation-delay:1.19s,2.17s; }
-.kp5 { animation-duration:.91s,4s;   animation-delay:1.505s,2.45s; }
-.kp6 { animation-duration:.91s,4s;   animation-delay:1.82s,2.73s; }
+.kp1 { animation-duration:1.4s,6s;  animation-delay:.15s,1.7s; }
+.kp2 { animation-duration:1.3s,4.2s; animation-delay:.8s,2.3s; }
+.kp3 { animation-duration:1.4s,3.6s; animation-delay:1.25s,2.7s; }
+.kp4 { animation-duration:1.4s,2.8s; animation-delay:1.7s,3.1s; }
+.kp5 { animation-duration:1.3s,4s;   animation-delay:2.15s,3.5s; }
+.kp6 { animation-duration:1.3s,4s;   animation-delay:2.6s,3.9s; }
 
 @media (max-width:860px) {
   #navbar.ks-nav .brand-logo {

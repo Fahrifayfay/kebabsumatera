@@ -529,8 +529,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
   const pct = document.getElementById('loaderPct');
   if(!Lo || !bar) return;
 
-  const t0 = 0; // Count from navigation, including time spent loading scripts.
-  const MIN = reduce ? 300 : 2960; // 2.96s assembly + .24s outro lead + .8s curtain = 4s total
+  const t0 = performance.now();
+  const MIN = reduce ? 300 : 4700; // Original intro timing before the four-second version.
   let loaded = document.readyState === 'complete';
   let done = false;
   let rafId = 0;
@@ -592,7 +592,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
         cleanup();
       };
       Lo.addEventListener('transitionend', onEnd);
-      fallbackId = setTimeout(cleanup, reduce ? 0 : 800);
+      fallbackId = setTimeout(cleanup, 2200);
     };
 
     if(hasGSAP && !reduce){
@@ -619,7 +619,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
     bar.style.transform = `scaleX(${shown})`;
     if(pct) pct.textContent = Math.round(shown*100) + '%';
 
-    if(p >= 1){
+    if(p >= 1 && loaded){
       finish();
       return;
     }
@@ -634,7 +634,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
     return;
   }
   rafId = requestAnimationFrame(tick);
-  fallbackId = setTimeout(finish, Math.max(0, MIN - (performance.now() - t0)));
+  fallbackId = setTimeout(finish, 9500);
 })();
 
 /* ---------- SCROLL-TRIGGER: teks, gambar, card ---------- */
