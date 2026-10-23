@@ -12,6 +12,17 @@ function layer(seed){
 const hosts=[$('#hero'),...$$('.section,.cta-section')];
 hosts.forEach((h,i)=>{h._s=i+1;if(i<3)h.prepend(layer(i+1))});
 
+/* FADE SAMBUNGAN: warna dasar wave = warna section berikutnya, tapi background section berikutnya punya gradasi/glow,
+   jadi muncul garis lurus di batas wave. Lapisan tipis berwarna sama dgn wave dipudarkan ke bawah (di atas glow, di bawah konten). */
+$$('.section-wave').forEach(w=>{
+  let nx=w.parentElement.nextElementSibling;
+  while(nx&&!nx.matches('.section,.cta-section'))nx=nx.nextElementSibling;
+  if(!nx||nx.querySelector(':scope > .seam-fade'))return;
+  const f=document.createElement('div');f.className='seam-fade';f.setAttribute('aria-hidden','true');
+  f.style.setProperty('--seam',getComputedStyle(w).getPropertyValue('--wave').trim());
+  nx.insertBefore(f,nx.querySelector(':scope > .wrap')||nx.firstChild);
+});
+
 /* HERO */
 const hero=$('#hero');
 $$('.ing-wrap').forEach(e=>e.remove());

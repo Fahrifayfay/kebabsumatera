@@ -529,8 +529,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
   const pct = document.getElementById('loaderPct');
   if(!Lo || !bar) return;
 
-  const t0 = performance.now();
-  const MIN = reduce ? 300 : 4700; /* durasi minimum intro (ms) - animasi logo (kp1-kp6) tidak terpengaruh */
+  const t0 = 0; // Count from navigation, including time spent loading scripts.
+  const MIN = reduce ? 300 : 2960; // 2.96s assembly + .24s outro lead + .8s curtain = 4s total
   let loaded = document.readyState === 'complete';
   let done = false;
   let rafId = 0;
@@ -592,7 +592,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
         cleanup();
       };
       Lo.addEventListener('transitionend', onEnd);
-      fallbackId = setTimeout(cleanup, 2200);
+      fallbackId = setTimeout(cleanup, reduce ? 0 : 800);
     };
 
     if(hasGSAP && !reduce){
@@ -619,7 +619,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
     bar.style.transform = `scaleX(${shown})`;
     if(pct) pct.textContent = Math.round(shown*100) + '%';
 
-    if(p >= 1 && loaded){
+    if(p >= 1){
       finish();
       return;
     }
@@ -634,7 +634,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
     return;
   }
   rafId = requestAnimationFrame(tick);
-  fallbackId = setTimeout(finish, 9500);
+  fallbackId = setTimeout(finish, Math.max(0, MIN - (performance.now() - t0)));
 })();
 
 /* ---------- SCROLL-TRIGGER: teks, gambar, card ---------- */
@@ -742,19 +742,38 @@ if(hasGSAP && !reduce){
  });
 })();
 
-/* Soft, synthesized pop feedback on intentional UI clicks; no audio file needed. */
+/* Suara klik sintetis (tanpa file audio): "pop" berisi + ketukan tajam di awal. Ubah VOL untuk mengatur keras-pelannya (1 = keras, .5 = sedang, .3 = pelan). */
 (function(){
- let audio=null,lastPop=0;
+ const VOL=.1;
+ let audio=null,master=null,noise=null,lastPop=0;
+ function init(){
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+  audio=new AC();
+  // kompresor: boleh keras tapi tidak pecah/clipping
+  const comp=audio.createDynamicsCompressor();
+  comp.threshold.value=-16;comp.knee.value=10;comp.ratio.value=8;comp.attack.value=.002;comp.release.value=.12;
+  master=audio.createGain();master.gain.value=VOL;master.connect(comp);comp.connect(audio.destination);
+  // butiran noise pendek untuk transient "tek"
+  const len=Math.floor(audio.sampleRate*.03),buf=audio.createBuffer(1,len,audio.sampleRate),ch=buf.getChannelData(0);
+  for(let i=0;i<len;i++)ch[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);
+  noise=buf;return true;
+ }
+ function tone(type,f0,f1,t,peak,dur){
+  const o=audio.createOscillator(),g=audio.createGain();
+  o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur*.8);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.01);
+ }
  function pop(){
   const now=performance.now();if(now-lastPop<55)return;lastPop=now;
-  const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;
-  audio ||= new Audio();
+  if(!audio&&!init())return;
   const play=()=>{
    const t=audio.currentTime;
-   const osc=audio.createOscillator(),gain=audio.createGain();
-   osc.type='sine';osc.frequency.setValueAtTime(690,t);osc.frequency.exponentialRampToValueAtTime(390,t+.075);
-   gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.045,t+.006);gain.gain.exponentialRampToValueAtTime(.0001,t+.09);
-   osc.connect(gain);gain.connect(audio.destination);osc.start(t);osc.stop(t+.095);
+   tone('sine',920,300,t,.42,.16);        // badan suara
+   tone('triangle',1500,700,t,.14,.09);   // lapisan atas biar "renyah"
+   const n=audio.createBufferSource(),hp=audio.createBiquadFilter(),g=audio.createGain();
+   n.buffer=noise;hp.type='highpass';hp.frequency.value=1800;g.gain.value=.22;
+   n.connect(hp);hp.connect(g);g.connect(master);n.start(t);
   };
   if(audio.state==='running')play();else audio.resume().then(play).catch(()=>{});
  }

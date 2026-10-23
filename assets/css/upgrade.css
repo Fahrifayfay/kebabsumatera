@@ -60,9 +60,9 @@ body:not(.ready) .hero{ transform:scale(1.045); }
 #cta-final{ background:linear-gradient(160deg,#e8263a 0%,#df2638 45%,#c81c2e 100%); }
 
 /* dekorasi organik (glow + blob) */
-#review::before,#lokasi::before{ content:''; position:absolute; z-index:0; width:min(520px,70vw); aspect-ratio:1; background:radial-gradient(circle at 35% 35%,rgba(255,190,40,.45),rgba(255,140,0,.12) 60%,transparent 72%); filter:blur(6px); animation:uMorph 14s ease-in-out infinite; pointer-events:none; }
+#review::before,#lokasi::before{ content:''; position:absolute; z-index:0; width:min(520px,70vw); aspect-ratio:1; background:radial-gradient(closest-side circle at 50% 50%,rgba(255,190,40,.45),rgba(255,140,0,.12) 60%,transparent 100%); filter:blur(6px); animation:uMorph 14s ease-in-out infinite; pointer-events:none; }
 #review::before{ top:-140px; right:-160px; }
-#lokasi::before{ bottom:-160px; left:-180px; background:radial-gradient(circle at 60% 40%,rgba(255,120,40,.35),rgba(255,190,40,.1) 60%,transparent 72%); }
+#lokasi::before{ bottom:-160px; left:-180px; background:radial-gradient(closest-side circle at 50% 50%,rgba(255,120,40,.35),rgba(255,190,40,.1) 60%,transparent 100%); }
 #review .wrap,#lokasi .wrap{ position:relative; z-index:1; }
 
 /* ---------------------------------------------------------------- PROMO (section 2) */

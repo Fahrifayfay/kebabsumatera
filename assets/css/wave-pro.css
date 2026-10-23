@@ -479,3 +479,10 @@ footer .rv,.footer-grid>*{translate:none!important}
 #cara-pesan>.section-wave{--wave:#ffec8a!important}
 #review>.section-wave{--wave:#ffd98f!important}
 @media(max-width:700px){#review,#lokasi{padding-top:calc(70px + var(--sw-h))}}
+/* Cincin putih & sinar mengikuti titik tengah logo (--cx/--cy diisi script.js) */
+.lb-rays,.lb-ring{left:var(--cx,50%);top:var(--cy,44%)}
+/* Fade sambungan wave → section berikutnya (diisi wave-pro.js): garis lurus di batas wave memudar halus */
+.seam-fade{position:absolute;left:0;right:0;top:-1px;height:clamp(96px,12vw,180px);background:var(--seam);z-index:0;pointer-events:none;
+  -webkit-mask-image:linear-gradient(#000 0,rgba(0,0,0,.82) 12%,rgba(0,0,0,.56) 28%,rgba(0,0,0,.3) 48%,rgba(0,0,0,.12) 70%,rgba(0,0,0,.03) 88%,transparent 100%);
+  mask-image:linear-gradient(#000 0,rgba(0,0,0,.82) 12%,rgba(0,0,0,.56) 28%,rgba(0,0,0,.3) 48%,rgba(0,0,0,.12) 70%,rgba(0,0,0,.03) 88%,transparent 100%)}
+

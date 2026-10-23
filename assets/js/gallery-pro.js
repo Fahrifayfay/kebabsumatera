@@ -1,29 +1,48 @@
 /* =====================================================================
-   gallery-pro.js — Carousel 3D, Video Promo (gaya stories), lightbox, WA
+   gallery-pro.js — Galeri 3D (kartu pop-out, spring, thumbnail), lightbox,
+   video promo gaya stories, dan hint WhatsApp
    ===================================================================== */
 (() => {
   'use strict';
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const mod = (a, n) => ((a % n) + n) % n;
+  const WA_NUM = '6282360422229';
+  const waLink = t => `https://wa.me/${WA_NUM}?text=${encodeURIComponent(t)}`;
+  const rp = n => 'Rp' + Number(n).toLocaleString('id-ID');
 
-  /* ------------------------------------------------------------- DATA */
-  const PHOTOS = [
-    { img: 'image/gerobak.jpeg', cap: 'Gerobak Kebab Sumatera', g: 'Outlet', desc: 'Hutan Percut Sei Tuan · 18.00–00.00 WIB', photo: true },
-    { img: 'image/kebab/kebabsumateraayam.webp', cap: 'Kebab Sumatera Ayam', g: 'Kebab' },
-    { img: 'image/kebab/kebabsumaterasapi.webp', cap: 'Kebab Sumatera Sapi', g: 'Kebab' },
-    { img: 'image/kebab/kebabspesialayam.webp', cap: 'Kebab Spesial Ayam', g: 'Kebab' },
-    { img: 'image/kebab/kebabspesialsapi.webp', cap: 'Kebab Spesial Sapi', g: 'Kebab' },
-    { img: 'image/model/kebabspesialmix.webp', cap: 'Kebab Spesial Mix', g: 'Kebab' },
-    { img: 'image/burger/burgerayamkeju.webp', cap: 'Burger Ayam Keju', g: 'Burger' },
-    { img: 'image/burger/burgertelur.webp', cap: 'Burger Telur Daging', g: 'Burger' },
-    { img: 'image/burger/burgersosis.webp', cap: 'Burger Sosis', g: 'Burger' },
-    { img: 'image/model/burgersapikeju.webp', cap: 'Burger Sapi Keju', g: 'Burger' },
-    { img: 'image/model/lumpia.webp', cap: 'Lumpia Sapi', g: 'Lainnya' },
-    { img: 'image/model/roti-bakar-bandung.webp', cap: 'Roti Bakar Bandung', g: 'Lainnya' },
-    { img: 'image/rasaroti/coklatkeju.webp', cap: 'Roti Bakar Coklat Keju', g: 'Lainnya' },
+  /* ------------------------------------------------------------- DATA
+     Nama, harga, dan deskripsi diambil dari FULL_MENU (catalog-data.js) bila tersedia,
+     jadi otomatis ikut berubah kalau harga di menu diubah. */
+  const BASE = [
+    { id: 'gerobak', g: 'Outlet', name: 'Gerobak Kebab Sumatera', desc: 'Hutan Percut Sei Tuan · 18.00–00.00 WIB', full: 'image/gerobak.jpeg', photo: true },
+    { id: 'kebab-4', g: 'Kebab', name: 'Kebab Sumatera Ayam', full: 'image/kebab/kebabsumateraayam.webp' },
+    { id: 'kebab-5', g: 'Kebab', name: 'Kebab Sumatera Sapi', full: 'image/kebab/kebabsumaterasapi.webp' },
+    { id: 'kebab-3', g: 'Kebab', name: 'Kebab Daging Crispy', full: 'image/kebab/kebabdagingcrispy.webp' },
+    { id: 'kebab-6', g: 'Kebab', name: 'Kebab Fried Chicken', full: 'image/kebab/kebabfriedchicken.webp' },
+    { id: 'kebab-7', g: 'Kebab', name: 'Kebab Sumatera Spesial', full: 'image/kebab/kebabspesial.webp' },
+    { id: 'kebab-9', g: 'Kebab', name: 'Kebab Spesial Sapi', full: 'image/kebab/kebabspesialsapi.webp' },
+    { id: 'kebab-10', g: 'Kebab', name: 'Kebab Spesial Mix', full: 'image/kebab/kebabspesialmix.webp' },
+    { id: 'burger-6', g: 'Burger', name: 'Burger Ayam Keju', full: 'image/burger/burgerayamkeju.webp' },
+    { id: 'burger-7', g: 'Burger', name: 'Burger Sapi Keju', full: 'image/burger/burgersapikeju.webp' },
+    { id: 'burger-4', g: 'Burger', name: 'Burger Sumatera Ayam', full: 'image/burger/burgersumateraayam.webp' },
+    { id: 'burger-2', g: 'Burger', name: 'Burger Sosis', full: 'image/burger/burgersosis.webp' },
+    { id: 'burger-3', g: 'Burger', name: 'Burger Ayam Crispy', full: 'image/burger/burgerayamcrispy.webp' },
+    { id: 'lumpia-1', g: 'Lainnya', name: 'Lumpia Sapi', full: 'image/model/lumpia.webp' },
+    { id: 'roti-0', g: 'Lainnya', name: 'Roti Bakar Bandung', full: 'image/rasaroti/coklatkeju.webp' },
   ];
+  const MENU = typeof FULL_MENU !== 'undefined' ? FULL_MENU : null;
+  const PHOTOS = BASE.map(b => {
+    const [c, i] = b.id.split('-'), m = MENU && MENU[c] && MENU[c].items[+i];
+    return Object.assign({}, b, {
+      name: (m && m.name) || b.name,
+      price: m ? m.price : 0,
+      desc: b.desc || (m && m.desc) || '',
+      card: `image/galeri/${b.id}.webp`, thumb: `image/galeri/${b.id}-t.webp`,
+    });
+  });
   const WORD = { Semua: 'KEBAB', Outlet: 'GEROBAK', Kebab: 'KEBAB', Burger: 'BURGER', Lainnya: 'CEMILAN' };
   const LABEL = { Outlet: 'Gerobak', Kebab: 'Kebab', Burger: 'Burger', Lainnya: 'Lainnya' };
   const VIDEOS = [
@@ -46,50 +65,102 @@
   /* ============================================================ CAROUSEL */
   const stage = $('#gxStage');
   if (stage) {
-    const track = $('#gxTrack'), word = $('#gxWord'), dotsBox = $('#gxDots');
+    const track = $('#gxTrack'), word = $('#gxWord'), thumbs = $('#gxThumbs'), fx = $('#gxFx');
     const infoNum = $('#gxNum'), infoName = $('#gxName'), infoDesc = $('#gxDesc');
-    const playBtn = $('#gxPlay'), filterBtns = $$('[data-gallery-filter]');
+    const playBtn = $('#gxPlay'), waBtn = $('#gxWa'), prog = $('#gxProg');
+    const filterBtns = $$('[data-gallery-filter]');
     const DUR = 5200;
 
     const cards = PHOTOS.map((p, i) => {
       const el = document.createElement('figure');
       el.className = 'gx-card' + (p.photo ? ' photo' : '');
+      el.dataset.g = p.g;
       el.setAttribute('role', 'group'); el.setAttribute('aria-roledescription', 'slide');
-      el.innerHTML = `<div class="gx-face"><span class="gx-tag">${LABEL[p.g]}</span><span class="gx-zoom" aria-hidden="true">⤢</span>` +
-        `<img ${i < 3 ? `src="${p.img}"` : ''} data-src="${p.img}" alt="${p.cap}" decoding="async" draggable="false"><span class="gx-name">${p.cap}</span><span class="gx-shine"></span></div>`;
+      const src = i < 3 ? `src="${p.card}"` : '';
+      el.innerHTML =
+        `<div class="gx-face"><div class="gx-art"></div>` +
+        (p.photo ? `<img class="gx-photo" ${src} data-src="${p.card}" alt="${p.name}" decoding="async" draggable="false">` : '<span class="gx-plate"></span>') +
+        `<div class="gx-cap"><b>${p.name}</b><small>${p.desc}</small></div><span class="gx-zoom" aria-hidden="true">⤢</span><span class="gx-shine"></span><i class="gx-dim"></i></div>` +
+        (p.photo ? '' : `<div class="gx-fw"><img class="gx-food" ${src} data-src="${p.card}" alt="${p.name}" decoding="async" draggable="false"></div>`) +
+        `<span class="gx-tag">${LABEL[p.g]}</span><span class="gx-num">${String(i + 1).padStart(2, '0')}</span><span class="gx-like" aria-hidden="true">❤</span>` +
+        `<span class="gx-price">${p.price ? `<small>MULAI</small>${rp(p.price)}` : 'MAMPIR!'}</span>`;
+      if (!p.price) $('.gx-price', el).style.background = 'var(--sun)', $('.gx-price', el).style.color = 'var(--ink)';
+      el._dim = $('.gx-dim', el); el._fw = $('.gx-fw', el); el._pr = $('.gx-price', el);
       track.appendChild(el);
       return el;
     });
+    const thumbBtns = PHOTOS.map((p, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('aria-label', `Lihat ${p.name}`);
+      b.innerHTML = `<img src="${p.thumb}" alt="" width="56" height="56" loading="lazy" draggable="false">`;
+      thumbs.appendChild(b); b.addEventListener('click', () => { const k = vis.indexOf(i); if (k >= 0) goTo(k); });
+      return b;
+    });
 
-    let vis = PHOTOS.map((_, i) => i), cur = 0, target = 0, active = -1, filter = 'Semua';
-    let raf = 0, dragging = false, moved = false, hovering = false, inView = false, userPaused = reduce;
-    let lastRound = null;
+    let likes = new Set();
+    try { likes = new Set(JSON.parse(localStorage.getItem('ks-gx-likes') || '[]')); } catch (_) {}
+    const saveLikes = () => { try { localStorage.setItem('ks-gx-likes', JSON.stringify([...likes])); } catch (_) {} };
+    PHOTOS.forEach((p, i) => cards[i].classList.toggle('liked', likes.has(p.id)));
+    let vis = PHOTOS.map((_, i) => i), cur = 0, target = 0, vel = 0, lastRound = null, filter = 'Semua', ready = false;
+    let raf = 0, dragging = false, moved = false, hovering = false, inView = false, userPaused = reduce, lastFx = 0;
 
-    let cachedStep = Math.max(120, (cards[0].offsetWidth || 300) * (innerWidth < 640 ? .62 : .6));
-    const step = () => cachedStep;
+    const step = () => Math.max(120, (cards[0].offsetWidth || 300) * (innerWidth < 640 ? .66 : .72));
 
     function layout() {
       const n = vis.length, s = step();
       vis.forEach((idx, k) => {
         const el = cards[idx];
-        let d = n > 1 ? mod(k - cur + n / 2, n) - n / 2 : k - cur;
+        // 1 kartu saja (filter Gerobak): tidak ada tetangga untuk "memutar", jadi kartu hanya ikut ditarik
+        // sedikit (karet) lalu membal kembali ke tengah — tidak lagi melayang keluar layar.
+        const d = n > 1 ? mod(k - cur + n / 2, n) - n / 2 : Math.sign(k - cur) * .42 * (1 - Math.exp(-Math.abs(k - cur) * 1.6));
         const a = Math.abs(d);
-        if (a > 3.3) { el.style.visibility = 'hidden'; el.style.pointerEvents = 'none'; return; }
+        if (a > 3.4) { el.style.visibility = 'hidden'; el.style.pointerEvents = 'none'; return; }
         el.style.visibility = ''; el.style.pointerEvents = '';
-        const x = Math.sign(d) * (Math.min(a, 1) * s + Math.max(0, a - 1) * s * .62);
-        el.style.transform = `translate3d(${x}px,0,${-a * 150}px) rotateY(${-d * 24}deg) scale(${1 - Math.min(a, 2.2) * .07})`;
+        const x = Math.sign(d) * (Math.min(a, 1) * s + Math.max(0, a - 1) * s * .6);
+        el.style.transform = `translate3d(${x.toFixed(1)}px,0,${(-a * 190).toFixed(0)}px) rotateY(${(-d * 32).toFixed(1)}deg) scale(${(1 - Math.min(a, 2.4) * .075).toFixed(3)})`;
         el.style.zIndex = String(100 - Math.round(a * 10));
-        el.style.opacity = String(Math.max(0, 1 - Math.max(0, a - 1.6) * .6));
+        el.style.opacity = String(Math.max(0, 1 - Math.max(0, a - 1.8) * .7).toFixed(2));
+        el._dim.style.opacity = String(Math.min(.55, a * .3).toFixed(2));
       });
     }
 
-    function tick() {
-      const diff = target - cur;
-      if (Math.abs(diff) < .002) { cur = target; layout(); raf = 0; return; }
-      cur += diff * (reduce ? 1 : .13);
+    /* spring berbasis waktu: sedikit membal saat berhenti, tetap konsisten walau FPS turun */
+    let lastT = 0;
+    function tick(t) {
+      const n = Math.min(5, Math.max(1, Math.round((t - (lastT || t - 16.7)) / 16.7))); lastT = t;
+      for (let i = 0; i < n; i++) { const diff = target - cur; vel = (vel + diff * .09) * .7; cur += vel; }
+      if (Math.abs(target - cur) < .0015 && Math.abs(vel) < .0015) { cur = target; vel = 0; lastT = 0; layout(); raf = 0; return; }
       layout(); raf = requestAnimationFrame(tick);
     }
-    const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    const kick = () => { if (reduce) { cur = target; layout(); return; } if (!raf) raf = requestAnimationFrame(tick); };
+
+    function loadNear(k) {
+      const n = vis.length;
+      for (let o = -3; o <= 3; o++) {
+        cards[vis[mod(k + o, n)]].querySelectorAll('img[data-src]').forEach(im => { if (!im.getAttribute('src')) im.src = im.dataset.src; });
+      }
+    }
+
+    /* efek saat kartu tengah berganti: makanan "meloncat", cincin, dan kilau bintang */
+    function burst(card) {
+      if (reduce || !ready) return;
+      const fw = card._fw;
+      if (fw) fw.animate([
+        { transform: 'translateZ(46px) scale(.62) rotate(-18deg)', opacity: .3 },
+        { transform: 'translateZ(46px) scale(1.08) rotate(3deg)', opacity: 1, offset: .62 },
+        { transform: 'translateZ(46px) scale(1) rotate(0)' }], { duration: 720, easing: 'cubic-bezier(.2,.9,.3,1)' });
+      card._pr.animate([{ transform: 'translateZ(90px) rotate(7deg) scale(0)' }, { transform: 'translateZ(90px) rotate(-4deg) scale(1.2)', offset: .6 }, { transform: 'translateZ(90px) rotate(7deg) scale(1)' }], { duration: 600, delay: 140, easing: 'ease-out', fill: 'backwards' });
+      const now = performance.now(); if (now - lastFx < 420) return; lastFx = now;
+      const ring = $('.gx-ring', fx);
+      ring.animate([{ transform: 'scale(.35)', opacity: .9 }, { transform: 'scale(2)', opacity: 0 }], { duration: 800, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      for (let i = 0; i < 9; i++) {
+        const s = document.createElement('i'); s.className = 'gx-spark'; s.textContent = i % 3 ? '✦' : '✧';
+        s.style.color = i % 2 ? '#fff' : '#ffe27a'; fx.appendChild(s);
+        const ang = (i / 9) * Math.PI * 2 + Math.random() * .5, r = 120 + Math.random() * 90;
+        s.animate([{ transform: 'translate(0,0) scale(.3) rotate(0)', opacity: 1 }, { transform: `translate(${Math.cos(ang) * r}px,${Math.sin(ang) * r * .8}px) scale(${.9 + Math.random() * .8}) rotate(${Math.random() * 200 - 100}deg)`, opacity: 0 }],
+          { duration: 700 + Math.random() * 400, easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = () => s.remove();
+      }
+    }
 
     function setActive() {
       const n = vis.length; if (!n) return;
@@ -98,36 +169,31 @@
       lastRound = k;
       const idx = vis[k], p = PHOTOS[idx];
       cards.forEach((c, i) => { c.classList.toggle('on', i === idx); c.setAttribute('aria-hidden', i === idx ? 'false' : 'true'); });
-      infoNum.textContent = `${String(k + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')} · ${LABEL[p.g]}`;
-      infoName.textContent = p.cap; infoDesc.textContent = p.desc || '';
-      $$('button', dotsBox).forEach((b, i) => b.setAttribute('aria-current', String(i === k)));
+      infoNum.textContent = `${String(k + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')} · ${LABEL[p.g]}${likes.has(p.id) ? ' · ❤ Favoritmu' : ''}`;
+      infoName.textContent = p.name; infoDesc.textContent = p.desc;
+      waBtn.href = waLink(p.photo ? 'Halo Kebab Sumatera, saya mau mampir ke gerobak malam ini 🍔' : `Halo Kebab Sumatera, saya mau pesan ${p.name} 🍔`);
+      waBtn.lastChild.textContent = p.photo ? 'Chat via WA' : 'Pesan via WA';
+      thumbBtns.forEach((b, i) => b.setAttribute('aria-current', String(i === idx)));
+      const tb = thumbBtns[idx];
+      if (tb) thumbs.scrollTo({ left: tb.offsetLeft - thumbs.clientWidth / 2 + tb.offsetWidth / 2, behavior: reduce ? 'auto' : 'smooth' });
       stage.dataset.g = p.g;
       const w = filter === 'Semua' ? WORD[p.g] : WORD[filter];
       if (word.textContent !== w) { word.textContent = w; word.classList.remove('swap'); void word.offsetWidth; word.classList.add('swap'); }
-      for (let o = -3; o <= 3; o++) { const im = cards[vis[mod(k + o, n)]].querySelector('img'); if (!im.getAttribute('src')) im.src = im.dataset.src; }
-      autoReset();
+      loadNear(k); burst(cards[idx]); autoReset();
     }
 
-    function go(delta) { target = Math.round(target) + delta; kick(); setActive(); }
+    function go(delta) { target = vis.length < 2 ? 0 : Math.round(target) + delta; kick(); setActive(); }
     function goTo(k) { const n = vis.length; let d = mod(k - Math.round(target), n); if (d > n / 2) d -= n; go(d); }
 
-    function buildDots() {
-      dotsBox.innerHTML = '';
-      vis.forEach((idx, k) => {
-        const b = document.createElement('button');
-        b.type = 'button'; b.setAttribute('aria-label', `Foto ${k + 1}: ${PHOTOS[idx].cap}`);
-        b.addEventListener('click', () => goTo(k)); dotsBox.appendChild(b);
-      });
-    }
-
     function applyFilter(f, animate = true) {
-      filter = f;
-      vis = [];
-      PHOTOS.forEach((p, i) => { const show = f === 'Semua' || p.g === f; cards[i].hidden = !show; if (show) vis.push(i); });
-      cur = target = 0; lastRound = null;
+      filter = f; vis = [];
+      PHOTOS.forEach((p, i) => { const show = f === 'Semua' || p.g === f; cards[i].hidden = !show; thumbBtns[i].hidden = !show; if (show) vis.push(i); });
+      cur = target = vel = 0; lastRound = null;
       filterBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.galleryFilter === f)));
-      buildDots(); layout(); setActive();
-      if (animate && !reduce) track.animate([{ opacity: 0, transform: 'scale(.9) translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      const solo = vis.length < 2;   // 1 kartu: panah & autoplay tidak ada gunanya
+      [$('#gxPrev'), $('#gxNext')].forEach(b => { if (b) b.style.display = solo ? 'none' : ''; });
+      layout(); setActive();
+      if (animate && !reduce) track.animate([{ opacity: 0, transform: 'scale(.88) translateY(30px)' }, { opacity: 1, transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.2,.8,.2,1)' });
     }
     filterBtns.forEach(b => {
       const f = b.dataset.galleryFilter;
@@ -137,62 +203,90 @@
     });
 
     /* ---- drag / swipe / klik ---- */
-    let sx = 0, sTarget = 0, lx = 0, lt = 0, vel = 0, pid = null;
+    let sx = 0, sTarget = 0, lx = 0, lt = 0, v = 0, pid = null;
     track.addEventListener('pointerdown', e => {
       if (e.button > 0) return;
-      dragging = true; moved = false; sx = lx = e.clientX; lt = performance.now(); vel = 0;
-      sTarget = target = cur; pid = e.pointerId; aPause();
+      dragging = true; moved = false; sx = lx = e.clientX; lt = performance.now(); v = 0;
+      sTarget = target = cur; vel = 0; pid = e.pointerId; aPause();
     });
     window.addEventListener('pointermove', e => {
-      if (dragging && e.pointerId === pid) {
-        const dx = e.clientX - sx;
-        if (!moved && Math.abs(dx) > 6) { moved = true; track.classList.add('drag'); try { track.setPointerCapture(pid); } catch (_) {} }
-        if (moved) {
-          const now = performance.now(), dt = Math.max(1, now - lt);
-          vel = .8 * vel + .2 * ((e.clientX - lx) / dt); lx = e.clientX; lt = now;
-          target = sTarget - dx / step(); kick();
-        }
+      if (!dragging || e.pointerId !== pid) return;
+      const dx = e.clientX - sx;
+      if (!moved && Math.abs(dx) > 6) { moved = true; track.classList.add('drag'); try { track.setPointerCapture(pid); } catch (_) {} }
+      if (moved) {
+        const now = performance.now(), dt = Math.max(1, now - lt);
+        v = .8 * v + .2 * ((e.clientX - lx) / dt); lx = e.clientX; lt = now;
+        target = sTarget - dx / step(); kick();
       }
     }, { passive: true });
     const endDrag = e => {
       if (!dragging || (e && e.pointerId !== pid)) return;
       dragging = false; track.classList.remove('drag');
-      if (moved) { target = Math.round(target - vel * 260 / step()); kick(); setActive(); }
+      if (moved) { target = vis.length < 2 ? 0 : Math.round(target - v * 280 / step()); kick(); setActive(); }
       aResume();
     };
     window.addEventListener('pointerup', endDrag); window.addEventListener('pointercancel', endDrag);
-
+    function like(idx, e) {
+      const p = PHOTOS[idx], on = !likes.has(p.id);
+      on ? likes.add(p.id) : likes.delete(p.id); saveLikes();
+      cards[idx].classList.toggle('liked', on);
+      infoNum.textContent = infoNum.textContent.replace(' · ❤ Favoritmu', '') + (on ? ' · ❤ Favoritmu' : '');
+      if (!on || reduce) return;
+      const r = stage.getBoundingClientRect(), x = e ? e.clientX - r.left : r.width / 2, y = e ? e.clientY - r.top : r.height / 2;
+      for (let i = 0; i < 7; i++) {
+        const h = document.createElement('i'); h.className = 'gx-heart'; h.textContent = '❤'; h.style.left = x + 'px'; h.style.top = y + 'px';
+        h.style.fontSize = 18 + Math.random() * 26 + 'px'; stage.appendChild(h);
+        const dx = (Math.random() - .5) * 150, dy = -(70 + Math.random() * 130), rot = (Math.random() - .5) * 60;
+        h.animate([{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 1 }, { transform: `translate(calc(-50% + ${dx * .5}px),calc(-50% + ${dy * .5}px)) scale(1.25) rotate(${rot}deg)`, opacity: 1, offset: .35 }, { transform: `translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(.9) rotate(${rot * 1.6}deg)`, opacity: 0 }],
+          { duration: 900 + Math.random() * 500, easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = () => h.remove();
+      }
+    }
+    let clickT = 0;
     track.addEventListener('click', e => {
       if (moved) { moved = false; return; }
       const c = e.target.closest('.gx-card'); if (!c) return;
       const idx = cards.indexOf(c), k = vis.indexOf(idx);
-      if (k === mod(Math.round(target), vis.length)) openLightbox(idx); else goTo(k);
+      if (k !== mod(Math.round(target), vis.length)) { goTo(k); return; }
+      if (clickT) { clearTimeout(clickT); clickT = 0; like(idx, e); return; }   // klik ke-2 = ❤
+      clickT = setTimeout(() => { clickT = 0; openLightbox(idx); }, 260);       // klik tunggal = zoom
     });
 
-    /* ---- tilt + parallax ---- */
-    stage.addEventListener('pointermove', e => {
-      if (e.pointerType !== 'mouse' || reduce) return;
-      const r = stage.getBoundingClientRect();
-      stage.style.setProperty('--wx', ((e.clientX - r.left) / r.width - .5) * -50 + 'px');
-      const c = e.target.closest('.gx-card.on');
-      if (c) {
-        const cr = c.getBoundingClientRect(), px = (e.clientX - cr.left) / cr.width - .5, py = (e.clientY - cr.top) / cr.height - .5;
-        c.style.setProperty('--tx', px * 18 + 'px'); c.style.setProperty('--ty', py * 14 + 'px');
-        c.style.setProperty('--tr', px * 4 + 'deg'); c.style.setProperty('--sx', (px + .5) * 100);
+    /* ---- parallax kursor (langsung ke elemen, tanpa CSS variable di parent) ---- */
+    const floats = $$('.gx-float img'); let pRaf = 0, px = 0, py = 0, pe = null;
+    const parallax = () => {
+      pRaf = 0;
+      word.style.translate = `calc(-50% + ${(-px * 46).toFixed(1)}px) ${(-py * 18).toFixed(1)}px`;
+      floats.forEach((f, i) => { const d = 22 + i * 9; f.style.translate = `${(-px * d).toFixed(1)}px ${(-py * d).toFixed(1)}px`; });
+      const c = $('.gx-card.on', track);
+      if (c && pe) {
+        const cr = c.getBoundingClientRect(), cx = (pe.clientX - cr.left) / cr.width - .5, cy = (pe.clientY - cr.top) / cr.height - .5;
+        if (Math.abs(cx) < .9 && Math.abs(cy) < .9) {
+          if (c._fw) { c._fw.style.translate = `${(cx * 22).toFixed(1)}px ${(cy * 14).toFixed(1)}px`; c._fw.style.rotate = `${(cx * 5).toFixed(1)}deg`; }
+          c._pr.style.translate = `${(cx * -12).toFixed(1)}px ${(cy * -8).toFixed(1)}px`;
+          c.style.setProperty('--sx', ((cx + .5) * 100).toFixed(0));
+        }
       }
-    });
-    stage.addEventListener('pointerleave', () => {
-      stage.style.setProperty('--wx', '0px');
-      $$('.gx-card.on', track).forEach(c => ['--tx', '--ty', '--tr'].forEach(v => c.style.removeProperty(v)));
-    });
+    };
+    if (fine && !reduce) {
+      stage.addEventListener('pointermove', e => {
+        if (e.pointerType !== 'mouse') return;
+        const r = stage.getBoundingClientRect(); px = (e.clientX - r.left) / r.width - .5; py = (e.clientY - r.top) / r.height - .5; pe = e;
+        if (!pRaf) pRaf = requestAnimationFrame(parallax);
+      });
+      stage.addEventListener('pointerleave', () => {
+        px = py = 0; pe = null; parallax();
+        $$('.gx-fw,.gx-price', track).forEach(el => { el.style.translate = ''; el.style.rotate = ''; });
+      });
+    }
 
     /* ---- keyboard + wheel + tombol ---- */
     stage.addEventListener('keydown', e => {
-      if (e.target.closest('button') && e.target !== stage) return;
+      if (e.target.closest('button,a') && e.target !== stage) return;
       if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
       else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
       else if (e.key === 'End') { e.preventDefault(); goTo(vis.length - 1); }
+      else if ((e.key === 'l' || e.key === 'L') && e.target === stage) { e.preventDefault(); like(vis[mod(Math.round(target), vis.length)]); }
       else if (e.key === 'Enter' && e.target === stage) { e.preventDefault(); openLightbox(vis[mod(Math.round(target), vis.length)]); }
     });
     let wheelAcc = 0, wheelT = 0;
@@ -206,11 +300,15 @@
 
     /* ---- autoplay (dengan tombol jeda) ---- */
     let aT = 0, aStart = 0, aRem = DUR;
-    const canAuto = () => !userPaused && inView && !hovering && !dragging && !document.hidden && !$('#lightbox').classList.contains('open');
+    const canAuto = () => vis.length > 1 && !userPaused && inView && !hovering && !dragging && !document.hidden && !$('#lightbox').classList.contains('open');
     function aRun() { clearTimeout(aT); aT = 0; if (!canAuto()) return; aStart = performance.now(); aT = setTimeout(() => { aT = 0; aRem = DUR; go(1); }, aRem); }
     function aPause() { if (aT) { clearTimeout(aT); aT = 0; aRem = Math.max(400, aRem - (performance.now() - aStart)); } stage.classList.add('paused'); }
     function aResume() { if (canAuto()) { stage.classList.remove('paused'); aRun(); } }
-    function autoReset() { aRem = DUR; stage.classList.toggle('noauto', userPaused); if (canAuto()) { stage.classList.remove('paused'); aRun(); } }
+    function autoReset() {
+      aRem = DUR; stage.classList.toggle('noauto', userPaused);
+      prog.classList.remove('run'); void prog.offsetWidth; if (!userPaused) prog.classList.add('run');
+      if (canAuto()) { stage.classList.remove('paused'); aRun(); }
+    }
     stage.style.setProperty('--ap', DUR + 'ms');
     stage.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { hovering = true; aPause(); } });
     stage.addEventListener('pointerleave', () => { hovering = false; aResume(); });
@@ -222,16 +320,14 @@
       playBtn.textContent = userPaused ? '▶' : '❚❚';
       playBtn.setAttribute('aria-label', userPaused ? 'Putar otomatis' : 'Jeda putar otomatis');
       playBtn.setAttribute('aria-pressed', String(userPaused));
-      if (userPaused) { aPause(); stage.classList.add('noauto'); } else { stage.classList.remove('noauto'); aRem = DUR; aResume(); }
+      if (userPaused) { aPause(); stage.classList.add('noauto'); prog.classList.remove('run'); } else { stage.classList.remove('noauto'); aRem = DUR; prog.classList.remove('run'); void prog.offsetWidth; prog.classList.add('run'); aResume(); }
     });
     if (userPaused) { playBtn.textContent = '▶'; playBtn.setAttribute('aria-label', 'Putar otomatis'); playBtn.setAttribute('aria-pressed', 'true'); }
     new IntersectionObserver(es => { inView = es[0].isIntersecting; inView ? aResume() : aPause(); }, { threshold: .35 }).observe(stage);
-    new ResizeObserver(() => {
-      cachedStep = Math.max(120, (cards[0].offsetWidth || 300) * (innerWidth < 640 ? .62 : .6));
-      layout();
-    }).observe(track);
+    new ResizeObserver(layout).observe(track);
 
     applyFilter('Semua', false);
+    ready = true;
     [$('.gx-filters'), stage].forEach((el, i) => reveal(el, i * 120));
   }
 
@@ -241,20 +337,20 @@
   function visList() { return $$('#gxTrack .gx-card').map((c, i) => c.hidden ? -1 : i).filter(i => i >= 0); }
   function showLb(idx) {
     const p = PHOTOS[idx]; lbIdx = idx;
-    const img = $('#lightboxImg'); img.src = p.img; img.alt = p.cap;
-    $('#lightboxCaption').textContent = p.cap;
+    const img = $('#lightboxImg'); img.src = p.full; img.alt = p.name;
+    $('#lightboxCaption').textContent = p.price ? `${p.name} · ${rp(p.price)}` : p.name;
     const list = visList(); $('#lightboxPosition').textContent = `${list.indexOf(idx) + 1} / ${list.length}`;
     img.style.animation = 'none'; void img.offsetWidth; img.style.animation = '';
   }
   function openLightbox(idx) {
     lbReturn = document.activeElement; showLb(idx);
     lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false'); document.body.classList.add('gallery-modal-open');
-    if (window.cursorRing) window.cursorRing.lift(lb);
+    const ring = $('#cursorRing'); if (ring) { if (window.cursorRing && window.cursorRing.lift) window.cursorRing.lift(lb); else lb.append(ring); }
     $('#lightboxClose').focus();
   }
   function closeLb() {
     lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true'); document.body.classList.remove('gallery-modal-open');
-    if (window.cursorRing) window.cursorRing.drop();
+    const ring = $('#cursorRing'); if (ring) { if (window.cursorRing && window.cursorRing.drop) window.cursorRing.drop(); else document.body.append(ring); }
     lbReturn && lbReturn.focus({ preventScroll: true });
   }
   function moveLb(d) { const l = visList(); if (!l.length) return; showLb(l[mod(l.indexOf(lbIdx) + d, l.length)]); }

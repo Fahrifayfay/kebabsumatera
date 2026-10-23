@@ -12,8 +12,8 @@ const LINKS = {
   grabfood: "https://grab.onelink.me/2695613898?pid=inappsharing&c=6-C2LFSEBBE8BAKE&is_retargeting=true&af_dp=grab%3A%2F%2Fopen%3FscreenType%3DGRABFOOD%26sourceID%3DA4pcqCZkS4%26merchantIDs%3D6-C2LFSEBBE8BAKE&af_force_deeplink=true&af_web_dp=https%3A%2F%2Fwww.grab.com%2Fdownload",
   tiktok: "https://www.tiktok.com/@kebabsumatera",
   // Tombol promo. Ganti dengan tautan video promo TikTok jika sudah ada.
-  tiktokPromo: "https://www.tiktok.com/@kebabsumatera",
-  tiktokOutlet: "https://vt.tiktok.com/ZS9DRrxDj2Ypf-5OYB3/?poisharing=Kebab-Sumatera---Hutan-Percut-Sei-Tuan",
+  tiktokPromo: "https://vt.tiktok.com/ZS9UWks6FfVY5-h5hGW/?poisharing=Kebab-Sumatera---Hutan-Percut-Sei-Tuan",
+  tiktokOutlet: "https://vt.tiktok.com/ZS9UWks6FfVY5-h5hGW/?poisharing=Kebab-Sumatera---Hutan-Percut-Sei-Tuan",
   instagram: "https://www.instagram.com/kebabsumatera/",
   // Google Maps: lokasi outlet dan rute (koordinat outlet).
   maps: "https://www.google.com/maps/search/?api=1&query=3.591945%2C98.755764",
