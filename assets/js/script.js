@@ -657,7 +657,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
     const pv = Math.round(shown*100);
     if(pct && pct._v !== pv){ pct._v = pv; pct.textContent = pv + '%'; }
 
-    if(p >= 1 && loaded){
+    if(p >= 1 && loaded && window.__ksDefer !== false){ // __ksDefer: script berat sudah siap (lihat index.html)
       finish();
       return;
     }
