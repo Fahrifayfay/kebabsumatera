@@ -16,7 +16,7 @@
     top: calc(var(--giant-glyph-top) - 0.2em * var(--giant-stretch)) !important;
     transform-origin: 50% 0 !important;
     transform: scaleY(var(--giant-stretch)) !important;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 40%, rgba(0,0,0,.35) 70%, transparent 96%) !important;
-            mask-image: linear-gradient(to bottom, #000 0%, #000 40%, rgba(0,0,0,.35) 70%, transparent 96%) !important;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 30%, rgba(0,0,0,.55) 48%, rgba(0,0,0,.12) 62%, transparent 76%) !important;
+            mask-image: linear-gradient(to bottom, #000 0%, #000 30%, rgba(0,0,0,.55) 48%, rgba(0,0,0,.12) 62%, transparent 76%) !important;
   }
 }

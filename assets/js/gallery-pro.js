@@ -17,7 +17,7 @@
      Nama, harga, dan deskripsi diambil dari FULL_MENU (catalog-data.js) bila tersedia,
      jadi otomatis ikut berubah kalau harga di menu diubah. */
   const BASE = [
-    { id: 'gerobak', g: 'Outlet', name: 'Gerobak Kebab Sumatera', desc: 'Hutan Percut Sei Tuan · 18.00–00.00 WIB', full: 'image/gerobak.jpeg', photo: true },
+    { id: 'gerobak', g: 'Outlet', name: 'Gerobak Kebab Sumatera', desc: 'Gerobak kuning di Percut Sei Tuan, buka tiap malam 18.00–00.00 WIB', info: 'Mampir ke gerobak kuning kami di Hutan, Percut Sei Tuan. Kebab, burger, dan roti bakar dibuat langsung di depanmu, buka setiap malam pukul 18.00–00.00 WIB.', full: 'image/gerobak.jpeg', photo: true, cart: true },
     { id: 'kebab-4', g: 'Kebab', name: 'Kebab Sumatera Ayam', full: 'image/kebab/kebabsumateraayam.webp' },
     { id: 'kebab-5', g: 'Kebab', name: 'Kebab Sumatera Sapi', full: 'image/kebab/kebabsumaterasapi.webp' },
     { id: 'kebab-3', g: 'Kebab', name: 'Kebab Daging Crispy', full: 'image/kebab/kebabdagingcrispy.webp' },
@@ -67,25 +67,46 @@
   if (stage) {
     const track = $('#gxTrack'), word = $('#gxWord'), thumbs = $('#gxThumbs'), fx = $('#gxFx');
     const infoNum = $('#gxNum'), infoName = $('#gxName'), infoDesc = $('#gxDesc');
-    const playBtn = $('#gxPlay'), waBtn = $('#gxWa'), prog = $('#gxProg');
+    const playBtn = $('#gxPlay'), prog = $('#gxProg');
     const filterBtns = $$('[data-gallery-filter]');
     const DUR = 5200;
 
+    const svg = d => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${d}</svg>`;
+    const IC = {
+      heart: svg('<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>'),
+      chat: svg('<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>'),
+      send: svg('<line x1="22" y1="3" x2="9.218" y2="10.083"/><polygon points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"/>'),
+      mark: svg('<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>'),
+    };
     const cards = PHOTOS.map((p, i) => {
       const el = document.createElement('figure');
-      el.className = 'gx-card' + (p.photo ? ' photo' : '');
+      el.className = 'gx-card' + (p.photo ? ' photo' : '') + (p.cart ? ' cart' : '');
       el.dataset.g = p.g;
       el.setAttribute('role', 'group'); el.setAttribute('aria-roledescription', 'slide');
       const src = i < 3 ? `src="${p.card}"` : '';
+      const mediaImg = p.photo && !p.cart;
       el.innerHTML =
-        `<div class="gx-face"><div class="gx-art"></div>` +
-        (p.photo ? `<img class="gx-photo" ${src} data-src="${p.card}" alt="${p.name}" decoding="async" draggable="false">` : '<span class="gx-plate"></span>') +
-        `<div class="gx-cap"><b>${p.name}</b><small>${p.desc}</small></div><span class="gx-zoom" aria-hidden="true">⤢</span><span class="gx-shine"></span><i class="gx-dim"></i></div>` +
-        (p.photo ? '' : `<div class="gx-fw"><img class="gx-food" ${src} data-src="${p.card}" alt="${p.name}" decoding="async" draggable="false"></div>`) +
-        `<span class="gx-tag">${LABEL[p.g]}</span><span class="gx-num">${String(i + 1).padStart(2, '0')}</span><span class="gx-like" aria-hidden="true">❤</span>` +
-        `<span class="gx-price">${p.price ? `<small>MULAI</small>${rp(p.price)}` : 'MAMPIR!'}</span>`;
+        `<div class="gx-face">` +
+          `<div class="gx-head"><span class="gx-ava"><img src="image/icon/logo.webp" alt="" width="30" height="30" draggable="false"></span>` +
+            `<span class="gx-who"><b>kebabsumatera</b><small>Hutan, Percut Sei Tuan</small></span><span class="gx-tag">${LABEL[p.g]}</span></div>` +
+          `<div class="gx-media"><div class="gx-art"></div>` +
+            (mediaImg ? `<img class="gx-photo" ${src} data-src="${p.card}" alt="${p.name}" decoding="async" draggable="false">` : '<span class="gx-plate"></span>') +
+            `<span class="gx-num">${i + 1}/${PHOTOS.length}</span></div>` +
+          `<div class="gx-dots" aria-hidden="true"><i></i><i class="a"></i><i></i></div>` +
+          `<div class="gx-acts">` +
+            `<button type="button" class="gx-act gx-a-like" data-act="like" aria-pressed="false" aria-label="Suka ${p.name}" tabindex="-1">${IC.heart}</button>` +
+            `<button type="button" class="gx-act gx-nofn" data-act="deco" aria-hidden="true" tabindex="-1">${IC.chat}</button>` +
+            `<button type="button" class="gx-act gx-nofn" data-act="deco" aria-hidden="true" tabindex="-1">${IC.send}</button>` +
+            `<button type="button" class="gx-act gx-a-save" data-act="save" aria-pressed="false" aria-label="Tandai ${p.name}" tabindex="-1">${IC.mark}</button>` +
+          `</div>` +
+          `<div class="gx-cap"><span class="gx-likes"></span><b>${p.name}</b><small>${p.desc}</small></div>` +
+          `<span class="gx-shine"></span><i class="gx-dim"></i></div>` +
+        (mediaImg ? '' : `<div class="gx-fw"><img class="gx-food" ${src} data-src="${p.card}" alt="${p.name}" decoding="async" draggable="false"></div>`) +
+        `<span class="gx-price">${p.price ? `<small>MULAI</small>${rp(p.price)}` : 'MAMPIR!'}</span>` +
+        `<span class="gx-big" aria-hidden="true">${IC.heart}</span>`;
       if (!p.price) $('.gx-price', el).style.background = 'var(--sun)', $('.gx-price', el).style.color = 'var(--ink)';
       el._dim = $('.gx-dim', el); el._fw = $('.gx-fw', el); el._pr = $('.gx-price', el);
+      el._like = $('.gx-a-like', el); el._save = $('.gx-a-save', el); el._likes = $('.gx-likes', el); el._big = $('.gx-big', el); el._btns = $$('[data-act]:not([data-act="deco"])', el);
       track.appendChild(el);
       return el;
     });
@@ -100,7 +121,19 @@
     let likes = new Set();
     try { likes = new Set(JSON.parse(localStorage.getItem('ks-gx-likes') || '[]')); } catch (_) {}
     const saveLikes = () => { try { localStorage.setItem('ks-gx-likes', JSON.stringify([...likes])); } catch (_) {} };
-    PHOTOS.forEach((p, i) => cards[i].classList.toggle('liked', likes.has(p.id)));
+    let saves = new Set();
+    try { saves = new Set(JSON.parse(localStorage.getItem('ks-gx-saves') || '[]')); } catch (_) {}
+    const saveSaves = () => { try { localStorage.setItem('ks-gx-saves', JSON.stringify([...saves])); } catch (_) {} };
+    const paint = i => {
+      const p = PHOTOS[i], c = cards[i], L = likes.has(p.id), S = saves.has(p.id);
+      c.classList.toggle('liked', L); c.classList.toggle('saved', S);
+      c._like.setAttribute('aria-pressed', String(L)); c._save.setAttribute('aria-pressed', String(S));
+      c._likes.textContent = L ? '❤ Kamu menyukai ini' : 'Ketuk 2× buat kasih ❤';
+    };
+    PHOTOS.forEach((_, i) => paint(i));
+    const toast = document.createElement('div'); toast.className = 'gx-toast'; toast.setAttribute('role', 'status'); stage.appendChild(toast);
+    let toastT = 0;
+    const say = t => { toast.textContent = t; toast.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('on'), 1800); };
     let vis = PHOTOS.map((_, i) => i), cur = 0, target = 0, vel = 0, lastRound = null, filter = 'Semua', ready = false;
     let raf = 0, dragging = false, moved = false, hovering = false, inView = false, userPaused = reduce, lastFx = 0;
 
@@ -168,11 +201,9 @@
       if (k === lastRound) return;
       lastRound = k;
       const idx = vis[k], p = PHOTOS[idx];
-      cards.forEach((c, i) => { c.classList.toggle('on', i === idx); c.setAttribute('aria-hidden', i === idx ? 'false' : 'true'); });
+      cards.forEach((c, i) => { c.classList.toggle('on', i === idx); c.setAttribute('aria-hidden', i === idx ? 'false' : 'true'); c._btns.forEach(b => { b.tabIndex = i === idx ? 0 : -1; }); });
       infoNum.textContent = `${String(k + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')} · ${LABEL[p.g]}${likes.has(p.id) ? ' · ❤ Favoritmu' : ''}`;
-      infoName.textContent = p.name; infoDesc.textContent = p.desc;
-      waBtn.href = waLink(p.photo ? 'Halo Kebab Sumatera, saya mau mampir ke gerobak malam ini 🍔' : `Halo Kebab Sumatera, saya mau pesan ${p.name} 🍔`);
-      waBtn.lastChild.textContent = p.photo ? 'Chat via WA' : 'Pesan via WA';
+      infoName.textContent = p.name; infoDesc.textContent = p.info || p.desc;
       thumbBtns.forEach((b, i) => b.setAttribute('aria-current', String(i === idx)));
       const tb = thumbBtns[idx];
       if (tb) thumbs.scrollTo({ left: tb.offsetLeft - thumbs.clientWidth / 2 + tb.offsetWidth / 2, behavior: reduce ? 'auto' : 'smooth' });
@@ -229,9 +260,14 @@
     function like(idx, e) {
       const p = PHOTOS[idx], on = !likes.has(p.id);
       on ? likes.add(p.id) : likes.delete(p.id); saveLikes();
-      cards[idx].classList.toggle('liked', on);
+      paint(idx);
       infoNum.textContent = infoNum.textContent.replace(' · ❤ Favoritmu', '') + (on ? ' · ❤ Favoritmu' : '');
       if (!on || reduce) return;
+      cards[idx]._big.animate([
+        { transform: 'translate(-50%,-50%) translateZ(120px) scale(.3) rotate(-14deg)', opacity: 0 },
+        { transform: 'translate(-50%,-50%) translateZ(120px) scale(1.25) rotate(4deg)', opacity: 1, offset: .32 },
+        { transform: 'translate(-50%,-50%) translateZ(120px) scale(1) rotate(0)', opacity: 1, offset: .68 },
+        { transform: 'translate(-50%,-50%) translateZ(120px) scale(1.12)', opacity: 0 }], { duration: 950, easing: 'ease-out' });
       const r = stage.getBoundingClientRect(), x = e ? e.clientX - r.left : r.width / 2, y = e ? e.clientY - r.top : r.height / 2;
       for (let i = 0; i < 7; i++) {
         const h = document.createElement('i'); h.className = 'gx-heart'; h.textContent = '❤'; h.style.left = x + 'px'; h.style.top = y + 'px';
@@ -241,12 +277,23 @@
           { duration: 900 + Math.random() * 500, easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = () => h.remove();
       }
     }
+    function act(kind, idx, btn, e) {
+      const p = PHOTOS[idx];
+      if (!reduce && (kind === 'like' || kind === 'save')) btn.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.4)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'cubic-bezier(.3,1.6,.5,1)' });
+      if (kind === 'like') like(idx, e && e.detail ? e : null);
+      else if (kind === 'save') {
+        const on = !saves.has(p.id); on ? saves.add(p.id) : saves.delete(p.id); saveSaves(); paint(idx);
+        say(on ? 'Ditandai ✓' : 'Tanda dihapus');
+      }
+    }
     let clickT = 0;
     track.addEventListener('click', e => {
       if (moved) { moved = false; return; }
       const c = e.target.closest('.gx-card'); if (!c) return;
       const idx = cards.indexOf(c), k = vis.indexOf(idx);
       if (k !== mod(Math.round(target), vis.length)) { goTo(k); return; }
+      const ab = e.target.closest('[data-act]');
+      if (ab) { if (ab.dataset.act !== 'deco') act(ab.dataset.act, idx, ab, e); return; }   // 'deco' = hiasan, tanpa fungsi
       if (clickT) { clearTimeout(clickT); clickT = 0; like(idx, e); return; }   // klik ke-2 = ❤
       clickT = setTimeout(() => { clickT = 0; openLightbox(idx); }, 260);       // klik tunggal = zoom
     });
