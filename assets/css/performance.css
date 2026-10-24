@@ -45,3 +45,46 @@
   /* Scroll tiles only: keep the popup's decorative pointer outside its border. */
   .mm-grid { max-height:calc(100dvh - 205px - env(safe-area-inset-bottom, 0px)); overflow-y:auto; }
 }
+
+/* ===== Anti-lag (tampilan tetap sama) ===== */
+/* Intro: lapisan sinar 190vmax -> 120vmax. Area yang terlihat identik (mask memudar di radius yang sama),
+   tapi piksel yang digambar/diputar ±60% lebih sedikit. */
+.lb-rays{ width:120vmax; height:120vmax;
+  /* sinar + pudar tepi sudah "dibakar" ke gambar => tanpa mask & tanpa gradient di-raster ulang */
+  background:url(../image/lb-rays.webp) center/100% 100% no-repeat;
+  -webkit-mask-image:none; mask-image:none;
+  will-change:transform; }
+/* Kilau logo: durasi/delay ke-3 sebelumnya ikut daftar 2 nilai (jadi 1.4s berulang). Dikembalikan ke 5s. */
+.kp1 { animation-duration:1.4s,6s,5s;   animation-delay:.15s,1.7s,4s; }
+.kp2 { animation-duration:1.3s,4.2s,5s; animation-delay:.8s,2.3s,4.15s; }
+.kp3 { animation-duration:1.4s,3.6s,5s; animation-delay:1.25s,2.7s,4.3s; }
+.kp4 { animation-duration:1.4s,2.8s,5s; animation-delay:1.7s,3.1s,4.45s; }
+.kp5 { animation-duration:1.3s,4s,5s;   animation-delay:2.15s,3.5s,4.6s; }
+.kp6 { animation-duration:1.3s,4s,5s;   animation-delay:2.6s,3.9s,4.75s; }
+/* Band teks promo / menu (KEBAB ✦ BURGER ✦ ...): gerak horizontal saja, hanya transform */
+.vb{ contain:layout style; }
+.vb span{ backface-visibility:hidden; }
+@media (max-width:860px),(hover:none){
+  /* animasi filter tidak bisa dipercepat GPU -> repaint tiap frame di HP. Gerak logo tetap utuh. */
+  .kp1{ animation-name:klBadge,klBadgeI; }
+  .kp2{ animation-name:klTower,klSway; }
+  .kp3{ animation-name:klRise,klHead; }
+  .kp4{ animation-name:klHand,klWave; }
+  .kp5{ animation-name:klDrop,klFloatA; }
+  .kp6{ animation-name:klUp,klFloatB; }
+  /* band: tanpa skew di HP (tetap ikut parallax scroll) */
+  .vb .vb-a{ transform:translateX(calc(var(--bx,0)*var(--dir,1)*1px)); }
+  .vb .vb-b{ transform:translateX(calc(var(--bx,0)*var(--dir,1)*-.8px)); }
+  /* partikel intro yang hanya hiasan: blur teks-glow dihapus, bentuknya sama */
+  .lb-sp{ text-shadow:none; }
+}
+
+/* Gerak mengambang intro (dipicu dari script.js): properti transform berdiri sendiri => compositor/GPU */
+@keyframes ksSwX{ from{translate:var(--x0,0) 0}   to{translate:var(--x1,0) 0} }
+@keyframes ksSwY{ from{translate:0 var(--y0,0)}   to{translate:0 var(--y1,0)} }
+@keyframes ksSwR{ from{rotate:var(--r0,0deg)}     to{rotate:var(--r1,0deg)} }
+@keyframes ksSwS{ from{scale:var(--s0,1)}         to{scale:var(--s1,1)} }
+@media (max-width:860px),(hover:none){
+  /* blur bayangan 20px x10 gambar => 9px (blur dihitung per piksel, jauh lebih ringan) */
+  .loader-food{ filter:drop-shadow(0 8px 9px rgba(0,0,0,.42)); }
+}

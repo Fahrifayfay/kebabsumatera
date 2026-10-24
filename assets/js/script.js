@@ -392,6 +392,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
   const fx = document.getElementById('loaderFx');
   const logoWrap = document.querySelector('.loader-logo-wrap');
   if(!line1El || !line2El || !fx) return;
+  // Judul huruf & komponen makanan intro disembunyikan CSS (wave-pro.css: display:none). Jangan bangun/animasikan elemen tak terlihat.
+  if(getComputedStyle(fx).display === 'none') return;
 
   // Huruf dibuat satu-satu. .lt-letter = animasi masuk, .lt-float (di dalamnya) = animasi mengambang,
   // dipisah supaya dua animasi tidak saling menimpa dan mengambang bisa mulai sejak huruf muncul.
@@ -502,6 +504,40 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
   const swing = (target, from, to, dur, phase)=>
     gsap.fromTo(target, from, Object.assign({duration:dur, ease:'sine.inOut', yoyo:true, repeat:-1}, to)).progress(phase);
 
+  // ANTI-LAG: gerakan mengambang (±80 tween GSAP yang jalan terus di main thread) dipindah ke CSS
+  // (translate/rotate/scale berdiri sendiri => dijalankan compositor/GPU). Gerak & parameternya sama persis.
+  // Browser lama tanpa dukungan CSS 'translate' tetap memakai versi GSAP di bawah.
+  const cssFloat = !!(window.CSS && CSS.supports && CSS.supports('translate','0 0') && CSS.supports('rotate','1deg') && CSS.supports('scale','1'));
+  const sw = (el, defs)=>{ // defs: [nama keyframe, durasi, fase, {--var:nilai}]
+    el.style.animation = defs.map(d=>`${d[0]} ${d[1].toFixed(2)}s ease-in-out ${(-d[1]*d[2]).toFixed(2)}s infinite alternate`).join(',');
+    defs.forEach(d=>Object.entries(d[3]).forEach(([k,v])=>el.style.setProperty(k,v)));
+  };
+  if(cssFloat){
+    const r = gsap.utils.random;
+    wrapEls.forEach((w,i)=>{
+      const dir = i%2 ? -1 : 1;
+      const ay = r(30,50), ax = r(16,30), ar = r(9,16), as = r(.06,.11);
+      w.parentElement.style.willChange = 'translate'; // anchor: geser samping
+      sw(w.parentElement, [['ksSwX', r(2.4,3.6), r(0,1), {'--x0':(-ax*dir).toFixed(1)+'px','--x1':(ax*dir).toFixed(1)+'px'}]]);
+      sw(w, [
+        ['ksSwY', r(1.9,2.9), r(0,1), {'--y0':(-ay).toFixed(1)+'px','--y1':ay.toFixed(1)+'px'}],
+        ['ksSwR', r(2.2,3.2), r(0,1), {'--r0':(-ar*dir).toFixed(1)+'deg','--r1':(ar*dir).toFixed(1)+'deg'}],
+        ['ksSwS', r(1.6,2.4), r(0,1), {'--s0':(1-as/2).toFixed(3),'--s1':(1+as).toFixed(3)}]
+      ]);
+    });
+    floats.forEach((f,i)=>{
+      const dir = i%2 ? -1 : 1;
+      sw(f, [
+        ['ksSwY', 1.25, (i*.09)%1, {'--y0':'-13px','--y1':'13px'}],
+        ['ksSwR', 1.8,  (i*.07)%1, {'--r0':(-6*dir)+'deg','--r1':(6*dir)+'deg'}],
+        ['ksSwS', 1.4,  (i*.11)%1, {'--s0':'.96','--s1':'1.07'}]
+      ]);
+    });
+    sw(line1El, [['ksSwX',2.6,0,{'--x0':'-12px','--x1':'12px'}],['ksSwR',2.6,0,{'--r0':'-1.4deg','--r1':'1.4deg'}]]);
+    sw(line2El, [['ksSwX',3.0,0,{'--x0':'12px','--x1':'-12px'}],['ksSwR',3.0,0,{'--r0':'1.2deg','--r1':'-1.2deg'}]]);
+    return;
+  }
+
   wrapEls.forEach((w,i)=>{
     const dir = i%2 ? -1 : 1, r = gsap.utils.random;
     const ay = r(30,50), ax = r(16,30), ar = r(9,16), as = r(.06,.11);
@@ -599,6 +635,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
       // Outro cinematic: komponen makanan "meledak" keluar dari tengah, logo+judul zoom & fade,
       // lalu layar menutup dengan efek iris/aperture (bukan tirai geser).
       const foods = document.querySelectorAll('.loader-food');
+      if(!foods.length){ gsap.to('.loader-inner', {opacity:0, scale:1.12, y:-30, duration:.6, ease:'power2.inOut'}); gsap.to('.loader-text', {opacity:0, y:-10, duration:.3, ease:'power1.in'}); setTimeout(startIris, 240); return; }
       const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
       gsap.to(foods, {
         opacity:0, scale:'+=.6', duration:.45, ease:'power2.in', stagger:.02,
@@ -617,7 +654,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
     const p = Math.min((now - t0) / MIN, 1);
     const shown = loaded ? p : Math.min(p,.92);
     bar.style.transform = `scaleX(${shown})`;
-    if(pct) pct.textContent = Math.round(shown*100) + '%';
+    const pv = Math.round(shown*100);
+    if(pct && pct._v !== pv){ pct._v = pv; pct.textContent = pv + '%'; }
 
     if(p >= 1 && loaded){
       finish();
