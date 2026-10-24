@@ -75,8 +75,10 @@ hosts.forEach(h=>io.observe(h));
 const hlio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('hl-in');hlio.unobserve(e.target)}}),{threshold:.35});
 $$('.section-head,.tentang-copy').forEach(e=>hlio.observe(e));
 const track=$('.flavor-track');let trackAnimation=null,lastRate=1;
+const introOn=()=>!document.body.classList.contains('ready')&&performance.now()<12000;
 function tick(t){
   waveFrame=0;if(document.hidden)return;
+  if(introOn())return; // intro masih jalan: halaman belum terlihat, jangan hitung layout tiap frame
   const y=scrollY,scrolled=y!==last,measure=geometryDirty||scrolled;
   sv+=(Math.max(-1,Math.min(1,(y-last)/55))-sv)*.1;last=y;
   if(Math.abs(sv)<.001)sv=0;
@@ -103,6 +105,7 @@ function tick(t){
   }
   if(sv!==0||(!reduce&&rows.some(({h})=>waveNodes.get(h)?.length)))wakeWave();
 }
+new MutationObserver(()=>{if(!introOn())wakeWave()}).observe(document.body,{attributes:true,attributeFilter:['class']});
 addEventListener('scroll',wakeWave,{passive:true});
 addEventListener('resize',()=>{geometryDirty=true;wakeWave();},{passive:true});
 new ResizeObserver(()=>{geometryDirty=true;wakeWave();}).observe(document.body);
@@ -130,6 +133,7 @@ const refreshST=()=>{try{window.ScrollTrigger&&ScrollTrigger.refresh()}catch(e){
 addEventListener('load',()=>{setTimeout(refreshST,1200);setTimeout(refreshST,3500)});
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>setTimeout(refreshST,300));
 setInterval(()=>{
+  if(introOn())return;
   $$('.rv:not(.in)').forEach(e=>{const r=e.getBoundingClientRect();if(r.top<innerHeight*.95&&r.bottom>-40)e.classList.add('in')});
   if(window.gsap)$$('[data-reveal],[data-gs]').forEach(e=>{if(e.style.opacity==='0'){const r=e.getBoundingClientRect();if(r.top<innerHeight*.9&&r.bottom>0)gsap.to(e,{opacity:1,x:0,y:0,scale:1,rotate:0,duration:.9,ease:'power3.out',clearProps:'transform,opacity',overwrite:true})}});
 },1100);

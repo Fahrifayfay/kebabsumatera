@@ -1,0 +1,209 @@
+/* =====================================================================
+   tentang-nav.css — dimuat PALING AKHIR di <head>
+   1) Hero: hapus lingkaran putih (halo)
+   2) Section Tentang: layout baru (art + copy + kartu info)
+   3) Navbar bawah HP + menu "Lainnya": palet merah / kuning / ink
+   Palet: merah #d92538 · merah tua #a41429 · kuning #ffda38 / #ffe04b
+          krem #fff6c7 / #fffdf5 · ink #24252a
+   ===================================================================== */
+
+/* ---------- 1. HERO: tanpa lingkaran putih ---------- */
+.hero-halo,
+.hero-halo::after{ display:none !important; }
+
+/* ---------- 2. TENTANG ---------- */
+#tentang{ padding:84px 0 120px; }
+#tentang .tentang-grid{ gap:56px; align-items:center; }
+#tentang .tentang-art{ height:430px; }
+#tentang .tentang-art img{ max-height:100%; width:auto; }
+
+/* stiker "Buka 18.00" di pojok art */
+.tg-badge{
+  position:absolute; z-index:3; right:2%; bottom:6%;
+  width:112px; height:112px; border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+  background:#fff6c7; color:#a41429; border:3px solid #24252a; box-shadow:4px 5px 0 #24252a;
+  font:800 .66rem/1.1 'Plus Jakarta Sans',system-ui,sans-serif; text-align:center;
+  rotate:9deg;
+}
+.tg-badge b{ font:400 1.75rem/1 'Anton',Impact,sans-serif; color:#d92538; letter-spacing:.01em; }
+
+/* desktop: copy rata kiri biar sejajar dengan art */
+@media(min-width:861px){
+  #tentang .tentang-copy{ max-width:none; margin-inline:0; text-align:left; }
+  #tentang .tentang-copy p,
+  #tentang .tentang-copy .eyebrow{ margin-inline:0; }
+  #tentang .tentang-copy p{ max-width:520px; font-size:1.06rem; }
+  #tentang .tentang-stats{ justify-content:flex-start; border-top:0; padding-top:0; margin-top:26px; }
+  #tentang .tentang-grid{ grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); }
+}
+
+/* stat: satu baris rapi, tidak melebar */
+#tentang .tentang-stats{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; max-width:520px; }
+#tentang .tentang-stats>div{ padding:12px 10px; text-align:center; }
+#tentang .tentang-stats>div strong{ font-size:1.55rem; line-height:1.1; }
+#tentang .tentang-stats>div span{ font-size:.76rem; line-height:1.3; display:block; margin-top:2px; }
+#tentang .tentang-copy .tentang-stats{ margin-inline:auto; }
+@media(min-width:861px){ #tentang .tentang-copy .tentang-stats{ margin-inline:0; } }
+
+/* kartu info outlet */
+.tentang-info{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px;
+  margin-top:64px; position:relative; z-index:2;
+}
+.ti-card{
+  display:flex; align-items:flex-start; gap:14px; padding:20px 20px 18px;
+  background:#fffdf5; color:#24252a; text-align:left;
+  border:3px solid #24252a; border-radius:22px; box-shadow:6px 7px 0 #24252a;
+  transition:transform .25s, box-shadow .25s;
+}
+a.ti-card:hover{ transform:translate(-2px,-3px); box-shadow:8px 10px 0 #24252a; }
+a.ti-card:active{ transform:translate(3px,4px); box-shadow:3px 3px 0 #24252a; }
+.ti-ico{
+  flex:none; width:48px; height:48px; border-radius:50%; display:grid; place-items:center;
+  background:#ffda38; color:#24252a; border:3px solid #24252a;
+}
+.ti-ico svg{ width:22px; height:22px; }
+.ti-body{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+.ti-body small{ font:700 .8rem/1.2 'Plus Jakarta Sans',system-ui,sans-serif; color:#a41429; }
+.ti-body strong{ font:800 1.04rem/1.3 'Plus Jakarta Sans',system-ui,sans-serif; color:#24252a; }
+.ti-body em{
+  font-style:normal; font:700 .84rem/1.3 'Plus Jakarta Sans',system-ui,sans-serif; color:#d92538;
+  display:inline-flex; align-items:center; gap:5px; margin-top:6px;
+}
+.ti-body em svg{ width:15px; height:15px; flex:none; }
+.ti-status{ color:#24252a !important; }
+
+/* HP & tablet */
+@media(max-width:860px){
+  #tentang{ padding:56px 0 100px; }
+  #tentang .tentang-grid{ gap:22px; }
+  #tentang .tentang-art{ height:300px; order:-1; }
+  .tg-badge{ width:96px; height:96px; right:4%; bottom:2%; font-size:.6rem; }
+  .tg-badge b{ font-size:1.5rem; }
+  #tentang .tentang-copy{ max-width:520px; margin-inline:auto; }
+  .tentang-info{ grid-template-columns:1fr; gap:16px; margin-top:40px; }
+  .ti-card{ padding:16px 16px 15px; border-radius:20px; box-shadow:5px 6px 0 #24252a; }
+}
+@media(max-width:380px){
+  #tentang .tentang-stats{ gap:10px; }
+  #tentang .tentang-stats>div{ padding:10px 6px; }
+  #tentang .tentang-stats>div strong{ font-size:1.3rem; }
+  #tentang .tentang-stats>div span{ font-size:.68rem; }
+}
+
+/* ---------- 3. NAVBAR BAWAH HP ---------- */
+@media(max-width:860px){
+  .m-nav{
+    padding:9px 7px 15px; border-radius:30px;
+    background:#ffda38;
+    border:3px solid #24252a;
+    box-shadow:0 5px 0 #24252a, 0 20px 30px -14px rgba(60,4,14,.6);
+  }
+  .m-nav::before,
+  .m-nav::after{ display:none; }
+
+  /* kapsul penanda halaman aktif */
+  .m-nav-pill{
+    top:-13px; bottom:11px; border-radius:24px;
+    background:#d92538;
+    border:3px solid #24252a;
+    box-shadow:0 4px 0 #24252a;
+  }
+
+  /* #mNav: menang lawan a:not([href]):not([class]) milik Bootstrap (tombol Lainnya tanpa href) */
+  #mNav a{ color:#24252a; font-weight:800; }
+  #mNav a.is-active{ color:#fff; text-shadow:none; transform:translateY(-8px); }
+  .m-nav a.is-active .m-ico{ color:#ffe04b; filter:none; transform:scale(1.12); }
+
+  .m-nav-progress{ left:26px; right:26px; bottom:5px; height:4px; background:rgba(36,37,42,.16); }
+  .m-nav-progress b{ background:#d92538; }
+
+  /* menu "Lainnya" */
+  .mm-bd{ background:rgba(36,37,42,.5); }
+  .mm{
+    background:#fff6c7; border:3px solid #24252a;
+    box-shadow:6px 8px 0 #24252a, 0 30px 50px -20px rgba(60,4,14,.6);
+  }
+  .mm::after{ background:#fff6c7; border-right-color:#24252a; border-bottom-color:#24252a; }
+  .mm-h{ color:#a41429; }
+  .mm-h i{ color:#d92538; }
+  .mm-grid a{ background:#fffdf5; border:2px solid #24252a; color:#24252a; box-shadow:0 3px 0 #24252a; }
+  .mm-grid a:active{ transform:translateY(2px); box-shadow:0 1px 0 #24252a; }
+  .mm-ic{
+    background:#ffda38; color:#24252a; border:2px solid #24252a; box-shadow:none;
+  }
+  .mm-grid a.is-active{ background:#d92538; border-color:#24252a; color:#fff; }
+  .mm-grid a.is-active .mm-ic{ background:#ffe04b; color:#24252a; }
+}
+
+/* ---------- 4. INTRO: lebih ringan, tampilan identik ----------
+   Sinar berputar dulu 190vmax (≈ 4x luas layar) padahal masker memudar
+   habis di 60% radius. Diperkecil ke 120vmax dengan stop masker yang
+   dihitung ulang (6% → 9.5%, 60% → 95%), jadi gambar akhirnya sama persis
+   tapi layer GPU yang diputar jauh lebih kecil. */
+.lb-rays{
+  width:120vmax; height:120vmax;
+  -webkit-mask-image:radial-gradient(closest-side,#000 9.5%,transparent 95%);
+          mask-image:radial-gradient(closest-side,#000 9.5%,transparent 95%);
+}
+
+/* ---------- 5. HERO: tombol & background ----------
+   Warna tombol dan lapisan background memakai palet situs
+   (merah #d92538 / merah tua #a41429 / kuning / krem / ink #24252a).
+   Lapisan background sengaja tidak memakai var(--hb), jadi tidak
+   "loncat" saat slide kebab <-> burger berganti. Semuanya statis. */
+
+/* Tombol utama: merah + garis ink + bayangan keras (gaya stiker situs) */
+.hero .hero-cta .kbtn{
+  border:3px solid #24252a; border-radius:100px; padding:13px 26px;
+  box-shadow:0 5px 0 #24252a;
+  transition:translate .2s, box-shadow .2s, background-color .2s, color .2s;
+}
+.hero .hero-cta .kbtn:hover{ translate:0 -2px; box-shadow:0 7px 0 #24252a; }
+.hero .hero-cta .kbtn:active{ translate:0 4px; box-shadow:0 1px 0 #24252a; }
+.hero .kbtn-primary{ background:#d92538; color:#fff; box-shadow:0 5px 0 #24252a; }
+.hero .kbtn-primary:hover{ background:#e83046; color:#fff; }
+/* Tombol kedua: krem, pasangan dari tombol merah */
+.hero .kbtn-ghost{
+  background:#fff6c7; color:#24252a; border-color:#24252a;
+  -webkit-backdrop-filter:none; backdrop-filter:none; text-shadow:none;
+}
+.hero .kbtn-ghost:hover{ background:#fffdf5; color:#24252a; }
+
+/* Background: titik halftone di seluruh hero */
+.hero{
+  background-image:radial-gradient(rgba(255,255,255,.34) 1.6px, transparent 2.3px);
+  background-size:22px 22px;
+}
+/* Sinar matahari + sorot cahaya di belakang makanan */
+.hero::before{
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:
+    radial-gradient(34% 40% at 50% 42%, rgba(255,255,255,.42) 0%, rgba(255,255,255,.14) 55%, transparent 100%),
+    repeating-conic-gradient(from -4deg at 50% 42%, rgba(255,255,255,.17) 0 6deg, transparent 6deg 18deg);
+  -webkit-mask-image:radial-gradient(62% 62% at 50% 42%, #000 0%, rgba(0,0,0,.55) 55%, transparent 100%);
+          mask-image:radial-gradient(62% 62% at 50% 42%, #000 0%, rgba(0,0,0,.55) 55%, transparent 100%);
+}
+/* Vignette hangat + bayangan bawah supaya teks putih terbaca di slide kuning */
+html body .hero::after{
+  display:block; content:""; position:absolute; inset:0; height:auto; z-index:1;
+  pointer-events:none; transition:none; -webkit-mask-image:none; mask-image:none;
+  background:
+    linear-gradient(to top, rgba(164,20,41,.5) 0%, rgba(164,20,41,.2) 26%, transparent 52%),
+    radial-gradient(125% 95% at 50% 42%, transparent 58%, rgba(164,20,41,.22) 100%);
+}
+@media(max-width:820px){
+  .hero::before{
+    background:
+      radial-gradient(60% 30% at 50% 38%, rgba(255,255,255,.42) 0%, rgba(255,255,255,.14) 55%, transparent 100%),
+      repeating-conic-gradient(from -4deg at 50% 38%, rgba(255,255,255,.17) 0 6deg, transparent 6deg 18deg);
+    -webkit-mask-image:radial-gradient(90% 46% at 50% 38%, #000 0%, rgba(0,0,0,.55) 55%, transparent 100%);
+            mask-image:radial-gradient(90% 46% at 50% 38%, #000 0%, rgba(0,0,0,.55) 55%, transparent 100%);
+  }
+  html body .hero::after{
+    background:
+      linear-gradient(to top, rgba(164,20,41,.58) 0%, rgba(164,20,41,.26) 30%, transparent 56%),
+      radial-gradient(130% 80% at 50% 38%, transparent 58%, rgba(164,20,41,.22) 100%);
+  }
+}
